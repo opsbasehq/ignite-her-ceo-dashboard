@@ -1,0 +1,214 @@
+{
+  "generated_at": "2026-08-18T23:17:12.694804Z",
+  "current_incomplete_week": "8/17/26 - 8/23/26",
+  "visible_history_start": "7/13/26 - 7/19/26",
+  "previous_week": {
+    "range": "8/10/26\u20138/16/26",
+    "compare_range": "8/3/26\u20138/9/26",
+    "total_clients": {
+      "value": 818.0,
+      "change": 1.0
+    },
+    "programs": {
+      "value": 232.0,
+      "change": -1.0,
+      "lab": {
+        "value": 131.0,
+        "change": 0.0
+      },
+      "launchpad": {
+        "value": 71.0,
+        "change": 0.0
+      },
+      "design_hub": {
+        "value": 1.0,
+        "change": 0.0
+      },
+      "incubator": {
+        "value": 29.0,
+        "change": -1.0
+      }
+    },
+    "university": {
+      "value": 390.0,
+      "change": 1.0,
+      "coach_school": {
+        "value": 104.0,
+        "change": 2.0
+      },
+      "ignite_her_university": {
+        "value": 286.0,
+        "change": -1.0
+      },
+      "new_failed_payments": 5.0,
+      "reconciled_payments": 1.0,
+      "net_revenue_impact": 4.0
+    },
+    "red_rebelle": {
+      "value": 196.0,
+      "change": 1.0,
+      "drop": {
+        "value": 158.0,
+        "change": 0.0
+      },
+      "room": {
+        "value": 38.0,
+        "change": 1.0
+      }
+    },
+    "soapbox": {
+      "new": 4.0,
+      "monthly": 46.0,
+      "monthly_change": -2.0,
+      "yearly": 311.0,
+      "yearly_change": 4.0,
+      "total": 357.0,
+      "total_change": 2.0
+    },
+    "upsells_total": 0.0,
+    "renewals": {
+      "renewed": 1.0,
+      "not_renewing": 0.0,
+      "no_response": 0.0
+    },
+    "called_to_lead": {
+      "total": 30.0,
+      "new": 4.0,
+      "total_change": 4.0
+    },
+    "daily_frequency": {
+      "kajabi_avg": 309.8,
+      "kajabi_change": -54.0,
+      "substack_avg": 150.2,
+      "substack_change": -46.0
+    },
+    "action_tracker": {
+      "value": 22.0,
+      "change": 6.0
+    },
+    "radio": {
+      "value": 74.0,
+      "change": -19.3
+    },
+    "merch": {
+      "gross": 4423.27,
+      "net": 1811.57,
+      "total_sales": 2442.72,
+      "orders_raw": "57 (58 Fulfilled)",
+      "aov": 33.16,
+      "returning": 0.2181,
+      "top_sellers": "IGNITE Her Frequencies Card, 50 Not Finished Travel Mug, Red Rebelle Boxy T-shirt",
+      "total_sales_change": 2204.2
+    }
+  },
+  "last_4_weeks": {
+    "range": "7/20/26\u20138/16/26",
+    "week_labels": [
+      "7/20/26\u20137/26/26",
+      "7/27/26\u20138/2/26",
+      "8/3/26\u20138/9/26",
+      "8/10/26\u20138/16/26"
+    ],
+    "total_clients": {
+      "value": 818.0,
+      "net_change": -20.0,
+      "weekly": [
+        838.0,
+        821.0,
+        817.0,
+        818.0
+      ]
+    },
+    "programs": {
+      "value": 232.0,
+      "net_change": -20.0
+    },
+    "university": {
+      "value": 390.0,
+      "net_change": -1.0,
+      "total_new_members": 0
+    },
+    "red_rebelle": {
+      "value": 196.0,
+      "net_change": 1.0
+    },
+    "soapbox": {
+      "latest_total": 357.0,
+      "latest_yearly": 311.0,
+      "latest_monthly": 46.0,
+      "total_new_over_period": 12.0,
+      "net_change_total": -2.0
+    },
+    "upsells_revenue_attention": {
+      "total_upsells": 0.0,
+      "univ_new_failed_payments": 10.0,
+      "univ_reconciled_payments": 9.0,
+      "univ_net_unresolved": 1.0
+    },
+    "engagement": {
+      "kajabi_avg_4wk": 365.0,
+      "kajabi_weekly": [
+        391.8,
+        394.4,
+        363.8,
+        309.8
+      ],
+      "substack_avg_4wk": 179.7,
+      "substack_weekly": [
+        179.0,
+        193.4,
+        196.2,
+        150.2
+      ],
+      "action_tracker_total_4wk": 82.0,
+      "action_tracker_avg_4wk": 20.5,
+      "action_tracker_weekly": [
+        24.0,
+        20.0,
+        16.0,
+        22.0
+      ],
+      "radio_avg_4wk": 81.7
+    },
+    "called_to_lead": {
+      "current_total": 30.0,
+      "net_change_4wk": 7.0
+    },
+    "merch": {
+      "total_sales_4wk": 3205.0,
+      "total_orders_4wk": 73.0,
+      "aov_4wk": 69.61,
+      "weekly_sales": [
+        356.42,
+        167.34,
+        238.52,
+        2442.72
+      ],
+      "top_sellers_latest": "IGNITE Her Frequencies Card, 50 Not Finished Travel Mug, Red Rebelle Boxy T-shirt"
+    }
+  },
+  "flags": [
+    "Soapbox 'soapbox_monthly' is blank in the workbook for week 7/13/26 - 7/19/26.",
+    "Soapbox 'soapbox_yearly' is blank in the workbook for week 7/13/26 - 7/19/26.",
+    "Merch orders jumped from 4 to 57 week-over-week (latest week 8/10/26 - 8/16/26) \u2014 confirmed real per Julie/Gen review on 2026-08-18."
+  ],
+  "notes": {
+    "called_to_lead": "Workbook has Total + New ticket counts only \u2014 no Purchased/Gifted/Virtual split and no stored ticket goal, so goal % is intentionally omitted (per Julie/Gen decision, Aug 2026).",
+    "renewals": "Workbook provides completed-week Renewed / Not Renewing / No Response counts only. It does not contain a forward-looking 'upcoming renewals due next month' roster.",
+    "red_rebelle_breakdown": "Workbook does not contain separate New/Renewal rows for Red Rebelle Room; only Drop + Room totals are tracked."
+  },
+  "upcoming_events": [
+    "Strategic Partnership Bonus Session (Jan \u2013 Ambassadors) \u2013 Julie to record",
+    "Facilitating rooms with Tracie Cornell (University) \u2013 8/18/26",
+    "Substack Audit (PIF Sheet with Substack & Maia Links)",
+    "Called to Lead Pre-Party (In person) \u2013 9/30/26"
+  ],
+  "need_to_schedule": [
+    "AI Masterclass for Solopreneurs with Brooke Shelton (University) \u2013 TBD",
+    "50 Not Finished Brand Builder (Jan. PIF Bonus) \u2013 TBD",
+    "Trademark/IP (LAB bonus, during LAB session) \u2013 TBD",
+    "Create a 10-Part Audio Series to Sell High Ticket Offers w/ Tara Counterman (launch bonus)",
+    "Sept Light Launch \u2013 TBD",
+    "Chiron Workshop (tentatively scheduled for 9/24/26)"
+  ]
+}

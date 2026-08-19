@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>IGNITE Her — CEO Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --maroon:#6e1e39;
+    --maroon-dark:#54172c;
+    --gold:#b8863f;
+    --cream:#f7f2e9;
+    --card:#ffffff;
+    --ink:#2c2420;
+    --ink-secondary:#6b6058;
+    --ink-muted:#948a80;
+    --line:#e8e0d3;
+    --good:#3f7d54;
+    --bad:#b5482f;
+    --flat:#948a80;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Inter',system-ui,sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:32px 24px 64px;}
+  header.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    flex-wrap:wrap;
+    gap:16px;
+    margin-bottom:20px;
+  }
+  .brand h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:34px;
+    color:var(--maroon);
+    margin:0 0 2px;
+    letter-spacing:-0.01em;
+  }
+  .brand .sub{font-size:14px;color:var(--ink-secondary);font-weight:500;}
+  .brand .range{font-size:13px;color:var(--ink-muted);margin-top:4px;}
+  .filter{
+    display:flex;
+    gap:6px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:4px;
+    height:fit-content;
+  }
+  .filter button{
+    border:none;
+    background:transparent;
+    padding:8px 16px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink-secondary);
+    cursor:pointer;
+    font-family:inherit;
+    transition:background .15s, color .15s;
+  }
+  .filter button.active{background:var(--maroon);color:#fff;}
+  .filter button:disabled{opacity:.35;cursor:not-allowed;}
+  hr.divider{border:none;border-top:1px solid var(--line);margin:20px 0 24px;}
+
+  .hero{
+    background:linear-gradient(135deg,var(--maroon),var(--maroon-dark));
+    color:#fff;
+    border-radius:var(--radius);
+    padding:26px 28px;
+    margin-bottom:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  .hero .label{font-size:12.5px;text-transform:uppercase;letter-spacing:.08em;opacity:.85;font-weight:600;}
+  .hero .value{font-family:'Fraunces',serif;font-size:44px;font-weight:600;margin-top:4px;}
+  .hero .change{font-size:15px;font-weight:600;margin-top:6px;opacity:.95;}
+  .hero .components{display:flex;gap:28px;flex-wrap:wrap;}
+  .hero .comp{text-align:right;}
+  .hero .comp .k{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;opacity:.8;}
+  .hero .comp .v{font-size:20px;font-weight:700;font-family:'Fraunces',serif;}
+  .hero .comp .c{font-size:12px;opacity:.9;}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px;}
+  .grid.two{grid-template-columns:repeat(2,1fr);}
+  @media (max-width:860px){.grid,.grid.two{grid-template-columns:1fr;}}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px 20px;
+  }
+  .card h3{
+    margin:0 0 12px;
+    font-size:13.5px;
+    color:var(--maroon);
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.03em;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .card h3 .badge{
+    font-size:11px;text-transform:none;letter-spacing:0;font-weight:600;color:var(--ink-muted);
+  }
+  .row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;font-size:14px;}
+  .row .rlabel{color:var(--ink-secondary);}
+  .row .rval{font-weight:700;color:var(--ink);}
+  .row.sub .rlabel{color:var(--ink-muted);font-size:13px;}
+  .stat{
+    display:flex;align-items:baseline;gap:10px;margin-bottom:2px;
+  }
+  .stat .num{font-family:'Fraunces',serif;font-size:30px;font-weight:600;}
+  .chg{font-size:13px;font-weight:700;}
+  .chg.good{color:var(--good);}
+  .chg.bad{color:var(--bad);}
+  .chg.flat{color:var(--flat);}
+  .footnote{font-size:12px;color:var(--ink-muted);margin-top:10px;line-height:1.5;}
+  .sparkline{display:flex;align-items:center;gap:4px;margin-top:10px;font-size:12px;color:var(--ink-muted);}
+  .spark-nums{font-variant-numeric:tabular-nums;letter-spacing:.02em;}
+  .bars{display:flex;align-items:flex-end;gap:3px;height:28px;margin-top:8px;}
+  .bars .bar{flex:1;background:var(--gold);opacity:.35;border-radius:3px 3px 0 0;min-height:3px;}
+  .bars .bar:last-child{opacity:1;background:var(--maroon);}
+  .list-simple{margin:0;padding:0;list-style:none;}
+  .list-simple li{
+    font-size:13.5px;
+    padding:7px 0;
+    border-top:1px solid var(--line);
+    color:var(--ink-secondary);
+    line-height:1.4;
+  }
+  .list-simple li:first-child{border-top:none;}
+  .pill{
+    display:inline-block;font-size:10.5px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.04em;background:#f4e9db;color:var(--gold);padding:2px 8px;border-radius:999px;
+    margin-left:6px;
+  }
+  .section-title{
+    font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-muted);
+    font-weight:700;margin:28px 0 12px;
+  }
+  .flags{
+    background:#fbf3e6;border:1px solid #e9d3a8;border-radius:var(--radius);
+    padding:14px 18px;margin-bottom:20px;font-size:13px;color:#7a5b1f;
+  }
+  .flags strong{display:block;margin-bottom:6px;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em;}
+  .flags ul{margin:4px 0 0;padding-left:18px;}
+  footer.meta{margin-top:36px;font-size:12px;color:var(--ink-muted);text-align:center;}
+  .empty{color:var(--ink-muted);font-size:13.5px;font-style:italic;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>CEO Dashboard</h1>
+      <div class="sub">Weekly Report</div>
+      <div class="range" id="activeRange">Loading…</div>
+    </div>
+    <div class="filter" id="filterBar">
+      <button data-view="previous" class="active">Previous Week</button>
+      <button data-view="trend">Last 4 Weeks</button>
+      <button data-view="trend8" disabled title="Unlocks once 8 completed weeks are available">Last 8 Weeks</button>
+    </div>
+  </header>
+  <hr class="divider" />
+
+  <div id="flagsBox"></div>
+  <div id="app"><p class="empty">Loading dashboard data…</p></div>
+
+  <footer class="meta" id="metaFooter"></footer>
+</div>
+
+<script>
+const fmtInt = n => (n === null || n === undefined) ? '—' : Math.round(n).toLocaleString('en-US');
+const fmt1 = n => (n === null || n === undefined) ? '—' : (Math.round(n*10)/10).toLocaleString('en-US');
+const fmtMoney = n => (n === null || n === undefined) ? '—' : '$' + n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmtPct = n => (n === null || n === undefined) ? '—' : (Math.round(n*1000)/10) + '%';
+
+function changeSpan(delta, opts={}) {
+  const {suffix='', invert=false, forceArrow=null} = opts;
+  if (delta === null || delta === undefined) return '<span class="chg flat">—</span>';
+  const rounded = Math.round(delta*10)/10;
+  let cls = 'flat', arrow = '—';
+  if (rounded > 0) { cls = invert ? 'bad' : 'good'; arrow = '↑'; }
+  else if (rounded < 0) { cls = invert ? 'good' : 'bad'; arrow = '↓'; }
+  const sign = rounded > 0 ? '+' : '';
+  return `<span class="chg ${cls}">${arrow} ${sign}${fmt1(rounded)}${suffix}</span>`;
+}
+
+function bars(values) {
+  if (!values || !values.length) return '';
+  const max = Math.max(...values.map(v=>Math.abs(v)));
+  return '<div class="bars">' + values.map(v => {
+    const h = max ? Math.max(3, Math.round((Math.abs(v)/max)*28)) : 3;
+    return `<div class="bar" style="height:${h}px" title="${v}"></div>`;
+  }).join('') + '</div>';
+}
+
+function sparkText(values, fmt=fmtInt) {
+  if (!values || !values.length) return '';
+  return `<div class="sparkline"><span class="spark-nums">${values.map(fmt).join(' → ')}</span></div>`;
+}
+
+let DATA = null;
+
+function renderFlags() {
+  const box = document.getElementById('flagsBox');
+  if (!DATA.flags || !DATA.flags.length) { box.innerHTML=''; return; }
+  box.innerHTML = `<div class="flags"><strong>Data notes</strong><ul>${DATA.flags.map(f=>`<li>${f}</li>`).join('')}</ul></div>`;
+}
+
+function renderPreviousWeek() {
+  const d = DATA.previous_week;
+  document.getElementById('activeRange').textContent = `${d.range}  ·  vs ${d.compare_range}`;
+
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="hero">
+      <div>
+        <div class="label">Total IGNITE Clients</div>
+        <div class="value">${fmtInt(d.total_clients.value)}</div>
+        <div class="change">${changeSpan(d.total_clients.change)} vs last week</div>
+      </div>
+      <div class="components">
+        <div class="comp"><div class="k">IGNITE Programs</div><div class="v">${fmtInt(d.programs.value)}</div><div class="c">${changeSpan(d.programs.change)}</div></div>
+        <div class="comp"><div class="k">IGNITE Her University</div><div class="v">${fmtInt(d.university.value)}</div><div class="c">${changeSpan(d.university.change)}</div></div>
+        <div class="comp"><div class="k">Red Rebelle Room</div><div class="v">${fmtInt(d.red_rebelle.value)}</div><div class="c">${changeSpan(d.red_rebelle.change)}</div></div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>IGNITE Other Programs <span class="badge">${fmtInt(d.programs.value)} total</span></h3>
+        <div class="row"><span class="rlabel">LAB (Annual)</span><span class="rval">${fmtInt(d.programs.lab.value)} ${changeSpan(d.programs.lab.change)}</span></div>
+        <div class="row"><span class="rlabel">Business Launchpad</span><span class="rval">${fmtInt(d.programs.launchpad.value)} ${changeSpan(d.programs.launchpad.change)}</span></div>
+        <div class="row"><span class="rlabel">Her Design Hub</span><span class="rval">${fmtInt(d.programs.design_hub.value)} ${changeSpan(d.programs.design_hub.change)}</span></div>
+        <div class="row"><span class="rlabel">Quantum Leap Incubator</span><span class="rval">${fmtInt(d.programs.incubator.value)} ${changeSpan(d.programs.incubator.change)}</span></div>
+      </div>
+
+      <div class="card">
+        <h3>IGNITE Her University <span class="badge">${fmtInt(d.university.value)} total</span></h3>
+        <div class="row"><span class="rlabel">Coach School</span><span class="rval">${fmtInt(d.university.coach_school.value)} ${changeSpan(d.university.coach_school.change)}</span></div>
+        <div class="row"><span class="rlabel">IGNITE Her® University</span><span class="rval">${fmtInt(d.university.ignite_her_university.value)} ${changeSpan(d.university.ignite_her_university.change)}</span></div>
+        <div class="row sub"><span class="rlabel">Revenue-impacting failed payments</span><span class="rval">${fmtInt(d.university.net_revenue_impact)}</span></div>
+        <div class="footnote">${fmtInt(d.university.new_failed_payments)} new failed payments, ${fmtInt(d.university.reconciled_payments)} reconciled this week.</div>
+      </div>
+
+      <div class="card">
+        <h3>Red Rebelle Room <span class="badge">${fmtInt(d.red_rebelle.value)} total</span></h3>
+        <div class="row"><span class="rlabel">Red Rebelle Drop</span><span class="rval">${fmtInt(d.red_rebelle.drop.value)} ${changeSpan(d.red_rebelle.drop.change)}</span></div>
+        <div class="row"><span class="rlabel">Red Rebelle Room</span><span class="rval">${fmtInt(d.red_rebelle.room.value)} ${changeSpan(d.red_rebelle.room.change)}</span></div>
+        <div class="footnote">${DATA.notes.red_rebelle_breakdown}</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Substack Soapbox <span class="badge">${fmtInt(d.soapbox.total)} total</span></h3>
+        <div class="row"><span class="rlabel">New</span><span class="rval">${fmtInt(d.soapbox.new)}</span></div>
+        <div class="row"><span class="rlabel">Yearly</span><span class="rval">${fmtInt(d.soapbox.yearly)} ${changeSpan(d.soapbox.yearly_change)}</span></div>
+        <div class="row"><span class="rlabel">Monthly</span><span class="rval">${fmtInt(d.soapbox.monthly)} ${changeSpan(d.soapbox.monthly_change)}</span></div>
+        <div class="row"><span class="rlabel">Total</span><span class="rval">${fmtInt(d.soapbox.total)} ${changeSpan(d.soapbox.total_change)}</span></div>
+      </div>
+
+      <div class="card">
+        <h3>Upsells &amp; Upgrades</h3>
+        <div class="stat"><span class="num">${fmtInt(d.upsells_total)}</span><span class="chg flat">this week</span></div>
+        <div class="footnote">${d.upsells_total === 0 ? 'No upsells or upgrades recorded this week.' : 'Combined upgrade activity across LAB, Design Hub/Incubator, Accelerator, Coach School, University and Launchpad.'}</div>
+      </div>
+
+      <div class="card">
+        <h3>Renewals — This Week's Activity</h3>
+        <div class="row"><span class="rlabel">Renewed</span><span class="rval">${fmtInt(d.renewals.renewed)}</span></div>
+        <div class="row"><span class="rlabel">Not Renewing</span><span class="rval">${fmtInt(d.renewals.not_renewing)}</span></div>
+        <div class="row"><span class="rlabel">No Response</span><span class="rval">${fmtInt(d.renewals.no_response)}</span></div>
+        <div class="footnote">${DATA.notes.renewals}</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Called to Lead Tickets</h3>
+        <div class="row"><span class="rlabel">Total</span><span class="rval">${fmtInt(d.called_to_lead.total)} ${changeSpan(d.called_to_lead.total_change)}</span></div>
+        <div class="row"><span class="rlabel">New this week</span><span class="rval">${fmtInt(d.called_to_lead.new)}</span></div>
+        <div class="footnote">${DATA.notes.called_to_lead}</div>
+      </div>
+
+      <div class="card">
+        <h3>Daily Frequency Downloads</h3>
+        <div class="row"><span class="rlabel">Kajabi Avg</span><span class="rval">${fmt1(d.daily_frequency.kajabi_avg)} ${changeSpan(d.daily_frequency.kajabi_change)}</span></div>
+        <div class="row"><span class="rlabel">Substack Avg</span><span class="rval">${fmt1(d.daily_frequency.substack_avg)} ${changeSpan(d.daily_frequency.substack_change)}</span></div>
+      </div>
+
+      <div class="card">
+        <h3>Action Tracker Submissions</h3>
+        <div class="stat"><span class="num">${fmtInt(d.action_tracker.value)}</span>${changeSpan(d.action_tracker.change)}</div>
+        <div class="footnote">vs previous week</div>
+      </div>
+    </div>
+
+    <div class="grid two">
+      <div class="card">
+        <h3>Weekly Merch Shop Sales <span class="badge">Shopify</span></h3>
+        <div class="row"><span class="rlabel">Gross</span><span class="rval">${fmtMoney(d.merch.gross)}</span></div>
+        <div class="row"><span class="rlabel">Net</span><span class="rval">${fmtMoney(d.merch.net)}</span></div>
+        <div class="row"><span class="rlabel">Total Sales</span><span class="rval">${fmtMoney(d.merch.total_sales)} ${changeSpan(d.merch.total_sales_change)}</span></div>
+        <div class="row"><span class="rlabel">Orders</span><span class="rval">${d.merch.orders_raw ?? '—'}</span></div>
+        <div class="row"><span class="rlabel">AOV</span><span class="rval">${fmtMoney(d.merch.aov)}</span></div>
+        <div class="row"><span class="rlabel">Returning</span><span class="rval">${fmtPct(d.merch.returning)}</span></div>
+        <div class="footnote">Top sellers: ${d.merch.top_sellers || '—'}</div>
+      </div>
+
+      <div class="card">
+        <h3>IGNITE Her® Radio Downloads <span class="badge">weekly avg</span></h3>
+        <div class="stat"><span class="num" style="font-size:22px">${fmt1(d.radio.value)}</span>${changeSpan(d.radio.change)}</div>
+        <div class="footnote">Supporting metric only.</div>
+      </div>
+    </div>
+
+    <div class="section-title">Current Operational Items</div>
+    <div class="grid two">
+      <div class="card">
+        <h3>Upcoming Events</h3>
+        ${renderList(DATA.upcoming_events)}
+      </div>
+      <div class="card">
+        <h3>Need to Schedule</h3>
+        ${renderList(DATA.need_to_schedule)}
+      </div>
+    </div>
+  `;
+}
+
+function renderList(items) {
+  if (!items || !items.length) return '<p class="empty">Nothing currently listed.</p>';
+  return `<ul class="list-simple">${items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+}
+
+function renderTrend() {
+  const d = DATA.last_4_weeks;
+  document.getElementById('activeRange').textContent = `${d.range}  ·  4-week trend`;
+
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="hero">
+      <div>
+        <div class="label">Total IGNITE Clients</div>
+        <div class="value">${fmtInt(d.total_clients.value)}</div>
+        <div class="change">${changeSpan(d.total_clients.net_change)} over last 4 weeks</div>
+        ${sparkText(d.total_clients.weekly)}
+      </div>
+      <div class="components">
+        <div class="comp"><div class="k">IGNITE Programs</div><div class="v">${fmtInt(d.programs.value)}</div><div class="c">${changeSpan(d.programs.net_change)} / 4wk</div></div>
+        <div class="comp"><div class="k">IGNITE Her University</div><div class="v">${fmtInt(d.university.value)}</div><div class="c">${changeSpan(d.university.net_change)} / 4wk</div></div>
+        <div class="comp"><div class="k">Red Rebelle Room</div><div class="v">${fmtInt(d.red_rebelle.value)}</div><div class="c">${changeSpan(d.red_rebelle.net_change)} / 4wk</div></div>
+      </div>
+    </div>
+
+    <div class="section-title">Client Base Trend</div>
+    <div class="grid">
+      <div class="card">
+        <h3>IGNITE Programs</h3>
+        <div class="stat"><span class="num">${fmtInt(d.programs.value)}</span>${changeSpan(d.programs.net_change)}</div>
+        <div class="footnote">Net change over last 4 weeks</div>
+      </div>
+      <div class="card">
+        <h3>IGNITE Her University</h3>
+        <div class="stat"><span class="num">${fmtInt(d.university.value)}</span>${changeSpan(d.university.net_change)}</div>
+        <div class="footnote">New members over period: ${fmtInt(d.university.total_new_members)}</div>
+      </div>
+      <div class="card">
+        <h3>Red Rebelle Room</h3>
+        <div class="stat"><span class="num">${fmtInt(d.red_rebelle.value)}</span>${changeSpan(d.red_rebelle.net_change)}</div>
+        <div class="footnote">Net change over last 4 weeks (New/Renewal split not tracked in source — see data notes)</div>
+      </div>
+    </div>
+
+    <div class="section-title">Soapbox Trend</div>
+    <div class="grid">
+      <div class="card">
+        <h3>Subscribers</h3>
+        <div class="row"><span class="rlabel">Latest Total</span><span class="rval">${fmtInt(d.soapbox.latest_total)} ${changeSpan(d.soapbox.net_change_total)}</span></div>
+        <div class="row"><span class="rlabel">Latest Yearly</span><span class="rval">${fmtInt(d.soapbox.latest_yearly)}</span></div>
+        <div class="row"><span class="rlabel">Latest Monthly</span><span class="rval">${fmtInt(d.soapbox.latest_monthly)}</span></div>
+        <div class="row"><span class="rlabel">New subscribers (4wk total)</span><span class="rval">${fmtInt(d.soapbox.total_new_over_period)}</span></div>
+      </div>
+      <div class="card">
+        <h3>Upsells &amp; Revenue Attention</h3>
+        <div class="row"><span class="rlabel">Total upsells (4wk)</span><span class="rval">${fmtInt(d.upsells_revenue_attention.total_upsells)}</span></div>
+        <div class="row"><span class="rlabel">University new failed payments</span><span class="rval">${fmtInt(d.upsells_revenue_attention.univ_new_failed_payments)}</span></div>
+        <div class="row"><span class="rlabel">University reconciled</span><span class="rval">${fmtInt(d.upsells_revenue_attention.univ_reconciled_payments)}</span></div>
+        <div class="row"><span class="rlabel">Net still-unresolved</span><span class="rval">${fmtInt(d.upsells_revenue_attention.univ_net_unresolved)}</span></div>
+      </div>
+      <div class="card">
+        <h3>Called to Lead</h3>
+        <div class="stat"><span class="num">${fmtInt(d.called_to_lead.current_total)}</span>${changeSpan(d.called_to_lead.net_change_4wk)}</div>
+        <div class="footnote">Total tickets, net change over last 4 weeks. ${DATA.notes.called_to_lead}</div>
+      </div>
+    </div>
+
+    <div class="section-title">Engagement Trend</div>
+    <div class="grid">
+      <div class="card">
+        <h3>Daily Frequency Downloads</h3>
+        <div class="row"><span class="rlabel">Kajabi 4wk avg</span><span class="rval">${fmt1(d.engagement.kajabi_avg_4wk)}</span></div>
+        ${bars(d.engagement.kajabi_weekly)}
+        <div class="row" style="margin-top:8px"><span class="rlabel">Substack 4wk avg</span><span class="rval">${fmt1(d.engagement.substack_avg_4wk)}</span></div>
+        ${bars(d.engagement.substack_weekly)}
+      </div>
+      <div class="card">
+        <h3>Action Tracker Submissions</h3>
+        <div class="row"><span class="rlabel">4wk Total</span><span class="rval">${fmtInt(d.engagement.action_tracker_total_4wk)}</span></div>
+        <div class="row"><span class="rlabel">4wk Weekly Avg</span><span class="rval">${fmt1(d.engagement.action_tracker_avg_4wk)}</span></div>
+        ${bars(d.engagement.action_tracker_weekly)}
+      </div>
+      <div class="card">
+        <h3>IGNITE Her® Radio Downloads <span class="badge">4wk avg</span></h3>
+        <div class="stat"><span class="num" style="font-size:22px">${fmt1(d.engagement.radio_avg_4wk)}</span></div>
+        <div class="footnote">Supporting metric only.</div>
+      </div>
+    </div>
+
+    <div class="section-title">Merch Trend</div>
+    <div class="grid two">
+      <div class="card">
+        <h3>Weekly Merch Shop Sales <span class="badge">4wk summary</span></h3>
+        <div class="row"><span class="rlabel">Total Sales</span><span class="rval">${fmtMoney(d.merch.total_sales_4wk)}</span></div>
+        <div class="row"><span class="rlabel">Total Orders</span><span class="rval">${fmtInt(d.merch.total_orders_4wk)}</span></div>
+        <div class="row"><span class="rlabel">AOV</span><span class="rval">${fmtMoney(d.merch.aov_4wk)}</span></div>
+        ${bars(d.merch.weekly_sales)}
+        <div class="footnote">Top sellers (latest week): ${d.merch.top_sellers_latest || '—'}</div>
+      </div>
+      <div class="card">
+        <h3>Weeks in this trend</h3>
+        ${renderList(d.week_labels)}
+      </div>
+    </div>
+  `;
+}
+
+function setView(view) {
+  document.querySelectorAll('#filterBar button').forEach(b=>b.classList.toggle('active', b.dataset.view===view));
+  if (view === 'previous') renderPreviousWeek();
+  else if (view === 'trend') renderTrend();
+}
+
+document.getElementById('filterBar').addEventListener('click', e => {
+  const btn = e.target.closest('button');
+  if (!btn || btn.disabled) return;
+  setView(btn.dataset.view);
+});
+
+fetch('data.json?t=' + Date.now())
+  .then(r => r.json())
+  .then(json => {
+    DATA = json;
+    renderFlags();
+    setView('previous');
+    const gen = new Date(DATA.generated_at);
+    document.getElementById('metaFooter').textContent =
+      `Data refreshed ${gen.toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'})} · Source: internal workbook (not published) · IGNITE Her CEO Dashboard`;
+  })
+  .catch(err => {
+    document.getElementById('app').innerHTML = `<p class="empty">Could not load dashboard data (${err}).</p>`;
+  });
+</script>
+</body>
+</html>
