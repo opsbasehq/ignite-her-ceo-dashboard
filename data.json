@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-25T21:49:47.475139Z",
-  "report_date_label": "Aug 23, 2026",
+  "generated_at": "2026-08-26T12:17:45.518546Z",
+  "report_date_label": "Aug 24, 2026",
   "current_week": {
     "range": "8/17/26\u20138/23/26",
     "compare_range": "8/10/26\u20138/16/26",
@@ -170,7 +170,7 @@
       "soapbox_open": 0.58,
       "soapbox_click": 0.02
     },
-    "coach_school_certifications": 0.0,
+    "coach_school_certifications": 10,
     "power_hour_count": 1.0,
     "_baseline_export": {
       "week_range": "8/17/26\u20138/23/26",

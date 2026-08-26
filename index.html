@@ -432,8 +432,8 @@ function renderEngagement() {
         <div class="footnote">vs previous week</div>
       </div>
       <div class="card">
-        <h3>Coach School</h3>
-        <div class="row"><span class="rlabel">Certifications completed</span><span class="rval">${fmtInt(d.coach_school_certifications)}</span></div>
+        <h3>Ignite Her Frequency Guide Certifications</h3>
+        <div class="row"><span class="rlabel">Completed</span><span class="rval">${fmtInt(d.coach_school_certifications)}</span></div>
       </div>
     </div>
     <div class="grid two">
@@ -475,7 +475,7 @@ function renderRevenue() {
     <div class="data-notes"><strong>Data Notes</strong>${notesText}</div>
     <div class="grid two">
       <div class="card">
-        <h3>Kajabi Revenue</h3>
+        <h3>Kajabi Revenue <span class="badge">${fmtMoney(s.kajabi.total_gross)} total</span></h3>
         <div class="row"><span class="rlabel">IGNITE Her University</span><span class="rval">${fmtMoney(s.kajabi.ignite_her_university)}</span></div>
         <div class="row"><span class="rlabel">Quantum Leap Incubator</span><span class="rval">${fmtMoney(s.kajabi.quantum_leap_incubator)}</span></div>
         <div class="row"><span class="rlabel">Power Hour</span><span class="rval">${fmtMoney(s.kajabi.power_hour)}</span></div>
