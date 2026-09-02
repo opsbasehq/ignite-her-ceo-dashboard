@@ -84,6 +84,17 @@
   }
   .meta-left .weekly{font-size:15px;font-weight:700;color:var(--maroon);}
   .meta-left .prevweek{font-size:13.5px;color:var(--ink-secondary);margin-top:2px;}
+  .meta-left .period-field{margin-top:4px;}
+  .meta-left .period-field .label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-muted);margin-bottom:3px;}
+  .period-select{
+    font-family:inherit;font-size:14px;font-weight:700;color:var(--maroon);
+    background:#fff;border:1px solid var(--line);border-radius:6px;
+    padding:5px 28px 5px 10px;cursor:pointer;
+    appearance:none;-webkit-appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%236e1e39'/></svg>");
+    background-repeat:no-repeat;background-position:right 10px center;
+  }
+  .period-select:focus{outline:2px solid var(--gold);outline-offset:1px;}
   .meta-right{text-align:right;}
   .meta-right .rd{text-align:right;}
   .meta-right .label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-muted);}
@@ -262,7 +273,7 @@
 
   <div class="tab-bar" id="tabBar"></div>
   <div class="section-title-lg" id="sectionTitle"></div>
-  <div class="legend-note" id="legendNote">All changes are vs last week: ↑ Increase · ↓ Decrease · — No change</div>
+  <div class="legend-note" id="legendNote"></div>
 
   <div id="app"></div>
 
@@ -294,14 +305,16 @@ function arrowVal(delta) {
   else if (rounded < 0) { cls = 'bad'; arrow = '↓'; }
   return `<span class="chg ${cls}">${arrow} ${fmt1(Math.abs(rounded))}</span>`;
 }
-function heroChange(delta, cssClass) {
-  // "↑ 1 vs last wk" / "↓ 1 vs last wk" / "— 0 vs last wk" style used in the PDF hero
-  if (delta === null || delta === undefined) return `<span class="${cssClass} flat">— vs last wk</span>`;
+function heroChange(delta, cssClass, suffix) {
+  // "↑ 1 vs last wk" / "↓ 1 vs last wk" / "— 0 vs last wk" style used in the PDF hero.
+  // suffix is period-aware: "vs last wk" for a single week, "vs 4 wks ago" for the trend view.
+  suffix = suffix || 'vs last wk';
+  if (delta === null || delta === undefined) return `<span class="${cssClass} flat">No prior data</span>`;
   const rounded = Math.round(delta*10)/10;
   let cls = 'flat', arrow = '—';
   if (rounded > 0) { cls = 'good'; arrow = '↑'; }
   else if (rounded < 0) { cls = 'bad'; arrow = '↓'; }
-  return `<span class="${cssClass} ${cls}">${arrow} ${fmt1(Math.abs(rounded))} vs last wk</span>`;
+  return `<span class="${cssClass} ${cls}">${arrow} ${fmt1(Math.abs(rounded))} ${suffix}</span>`;
 }
 function changeLabel(delta, val) {
   // "0 (no change)" / "N (+delta)" style used in the PDF
@@ -319,46 +332,55 @@ function renderList(items) {
 }
 
 let DATA = null;
+let ACTIVE_PERIOD_ID = null;
+let ACTIVE_TAB_ID = 'membership';
 
-function heroHTML(d) {
+function getPeriod(id) {
+  return DATA.periods.find(p => p.id === id);
+}
+
+function heroHTML(period) {
+  const d = period.data;
+  const suffix = period.is_trend ? 'vs 4 wks ago' : 'vs last wk';
+  const moved = period.what_moved;
   return `
     <div class="hero">
       <div class="hero-main">
         <div class="label">Total IGNITE Clients</div>
         <div class="value">${fmtInt(d.total_clients.value)}</div>
-        ${heroChange(d.total_clients.change, 'change')}
+        ${heroChange(d.total_clients.change, 'change', suffix)}
       </div>
       <div class="components">
         <div class="comp">
           <div class="k">IGNITE Her University</div>
           <div class="ksub">Coach School + University</div>
           <div class="v">${fmtInt(d.university.value)}</div>
-          ${heroChange(d.university.change, 'c')}
+          ${heroChange(d.university.change, 'c', suffix)}
         </div>
         <div class="comp">
           <div class="k">Red Rebelle Room</div>
           <div class="ksub">Drop + Room</div>
           <div class="v">${fmtInt(d.red_rebelle.value)}</div>
-          ${heroChange(d.red_rebelle.change, 'c')}
+          ${heroChange(d.red_rebelle.change, 'c', suffix)}
         </div>
         <div class="comp">
           <div class="k">IGNITE Programs</div>
           <div class="ksub">LAB · Launchpad · Design Hub · Incubator</div>
           <div class="v">${fmtInt(d.programs.value)}</div>
-          ${heroChange(d.programs.change, 'c')}
+          ${heroChange(d.programs.change, 'c', suffix)}
         </div>
       </div>
     </div>
-    ${d.what_moved_this_week_curated ? `
+    ${moved && moved.length ? `
     <div class="moved-box">
       <h3>What moved this week</h3>
-      <ul>${d.what_moved_this_week_curated.map(m=>`<li>${m}</li>`).join('')}</ul>
+      <ul>${moved.map(m=>`<li>${m}</li>`).join('')}</ul>
     </div>` : ''}
     <div class="pulse-box">
-      <h3>Weekly Pulse</h3>
+      <h3>Weekly Pulse${period.is_trend ? ' — 4-Week Trend' : ''}</h3>
       <div class="pulse-grid">
         <div class="pulse-item">
-          <div class="pk">Net Client Change</div>
+          <div class="pk">Net Client Change${period.is_trend ? ' (4 Wks)' : ''}</div>
           <div class="pv">${d.total_clients.change > 0 ? '+' : ''}${fmtInt(d.total_clients.change)}</div>
           <div class="pc">${changeSpan(d.total_clients.change)}</div>
         </div>
@@ -368,12 +390,12 @@ function heroHTML(d) {
           <div class="prow"><span class="plabel">Substack</span><span class="pval">${fmt1(d.daily_frequency.substack_avg)}</span>${arrowVal(d.daily_frequency.substack_change)}</div>
         </div>
         <div class="pulse-item">
-          <div class="pk">Action Tracker Submissions</div>
+          <div class="pk">Action Tracker Submissions${period.is_trend ? ' (4-Wk Total)' : ''}</div>
           <div class="pv">${fmtInt(d.action_tracker.value)}</div>
           <div class="pc">${changeSpan(d.action_tracker.change)}</div>
         </div>
         <div class="pulse-item">
-          <div class="pk">Called to Lead — New This Week</div>
+          <div class="pk">Called to Lead — New${period.is_trend ? ' (4 Wks)' : ' This Week'}</div>
           <div class="pv">${fmtInt(d.called_to_lead.new)}</div>
           <div class="pc">${fmtInt(d.called_to_lead.total)} / ${d.called_to_lead.goal} total (${fmtPct1(d.called_to_lead.progress_pct)} of goal)</div>
         </div>
@@ -382,8 +404,10 @@ function heroHTML(d) {
   `;
 }
 
-function renderMembership() {
-  const d = DATA.current_week;
+function renderMembership(period) {
+  const d = period.data;
+  const isTrend = period.is_trend;
+  const revokedLabel = isTrend ? 'Members access revoked (4-wk total)' : 'Members access revoked this week';
   return `
     <div class="grid">
       <div class="card">
@@ -394,7 +418,7 @@ function renderMembership() {
       <div class="card">
         <h3>IGNITE Her University</h3>
         <div class="stat"><span class="num">${fmtInt(d.university.value)}</span>${changeSpan(d.university.change)}</div>
-        <div class="footnote">Members access revoked this week: ${fmtInt(d.university.coach_school_access_revoked)}</div>
+        <div class="footnote">${revokedLabel}: ${fmtInt(d.university.coach_school_access_revoked)}</div>
       </div>
       <div class="card">
         <h3>Red Rebelle Room <span class="badge">${fmtInt(d.red_rebelle.value)} total</span></h3>
@@ -407,18 +431,18 @@ function renderMembership() {
     <div class="grid three">
       <div class="card">
         <h3>Substack Soapbox <span class="badge">${fmtInt(d.soapbox.total)} total</span></h3>
-        <div class="row"><span class="rlabel">New</span><span class="rval">${fmtInt(d.soapbox.new)}</span></div>
+        <div class="row"><span class="rlabel">New${isTrend ? ' (4-wk total)' : ''}</span><span class="rval">${fmtInt(d.soapbox.new)}</span></div>
         <div class="row"><span class="rlabel">Monthly</span><span class="rval">${fmtInt(d.soapbox.monthly)}</span></div>
         <div class="row"><span class="rlabel">Yearly</span><span class="rval">${fmtInt(d.soapbox.yearly)}</span></div>
         <div class="row"><span class="rlabel">Total</span><span class="rval">${fmtInt(d.soapbox.total)}</span></div>
       </div>
       <div class="card">
-        <h3>Upsells &amp; Upgrades</h3>
+        <h3>Upsells &amp; Upgrades${isTrend ? ' <span class="badge">4-wk total</span>' : ''}</h3>
         <div class="row"><span class="rlabel">IGNITE Her U</span><span class="rval">${fmtInt(d.upsells.ignite_her_u.value)} ${changeLabel(d.upsells.ignite_her_u.change)}</span></div>
         <div class="row"><span class="rlabel">1:1 Power Hours</span><span class="rval">${fmtInt(d.upsells.power_hour.value)}</span></div>
       </div>
       <div class="card">
-        <h3>Renewals</h3>
+        <h3>Renewals${isTrend ? ' <span class="badge">4-wk total</span>' : ''}</h3>
         <div class="row"><span class="rlabel">Renewed</span><span class="rval">${fmtInt(d.renewals.renewed)}</span></div>
         <div class="row"><span class="rlabel">Not Renewing</span><span class="rval">${fmtInt(d.renewals.not_renewing)}</span></div>
         <div class="row"><span class="rlabel">No Response</span><span class="rval">${fmtInt(d.renewals.no_response)}</span></div>
@@ -427,13 +451,18 @@ function renderMembership() {
   `;
 }
 
-function renderEngagement() {
-  const d = DATA.current_week;
+function renderEngagement(period) {
+  const d = period.data;
+  const isTrend = period.is_trend;
+  const atFootnote = isTrend
+    ? 'Total across the 4-week period'
+    : (d.action_tracker.change === null ? 'No prior week to compare' : 'vs previous week');
+  const certsLabel = isTrend ? 'Completed (4-wk total)' : 'Completed';
   return `
     <div class="grid">
       <div class="df-col">
         <div class="card">
-          <h3>Daily Frequency Downloads</h3>
+          <h3>Daily Frequency Downloads${isTrend ? ' <span class="badge">4-wk avg</span>' : ''}</h3>
           <div class="row row-emph"><span class="rlabel">Kajabi Avg</span><span class="rval">${fmt1(d.daily_frequency.kajabi_avg)} ${changeSpan(d.daily_frequency.kajabi_change)}</span></div>
           <div class="row row-emph"><span class="rlabel">Substack Avg</span><span class="rval">${fmt1(d.daily_frequency.substack_avg)} ${changeSpan(d.daily_frequency.substack_change)}</span></div>
         </div>
@@ -442,20 +471,20 @@ function renderEngagement() {
       <div class="card">
         <h3>Action Tracker Submissions</h3>
         <div class="stat"><span class="num">${fmtInt(d.action_tracker.value)}</span>${changeSpan(d.action_tracker.change)}</div>
-        <div class="footnote">vs previous week</div>
+        <div class="footnote">${atFootnote}</div>
       </div>
       <div class="card">
         <h3>Ignite Her Frequency Guide Certifications</h3>
-        <div class="row"><span class="rlabel">Completed</span><span class="rval">${fmtInt(d.coach_school_certifications)}</span></div>
+        <div class="row"><span class="rlabel">${certsLabel}</span><span class="rval">${fmtInt(d.coach_school_certifications)}</span></div>
       </div>
     </div>
     <div class="grid two">
       <div class="card">
         <h3>Webinar Unique Viewers</h3>
         <div class="webinar-head"><span>Webinar</span><span>UV / Rate</span></div>
-        <div class="webinar-row"><span class="wname">Facilitating Rooms (Tue)</span><span class="wval">${fmtInt(d.webinars.tracie_tuesday)} · ${fmtPct1(d.webinars.tracie_tuesday_rate)}</span></div>
-        <div class="webinar-row"><span class="wname">Substack Review (Wed)</span><span class="wval">${fmtInt(d.webinars.substack_review_wed)} · ${fmtPct1(d.webinars.substack_review_wed_rate)}</span></div>
-        <div class="webinar-row"><span class="wname">IGNITE Her Frequencies (Thu)</span><span class="wval">${fmtInt(d.webinars.frequencies_thu)} · ${fmtPct1(d.webinars.frequencies_thu_rate)}</span></div>
+        <div class="webinar-row"><span class="wname">Tue — Business Support</span><span class="wval">${fmtInt(d.webinars.tue)} · ${fmtPct1(d.webinars.tue_rate)}</span></div>
+        <div class="webinar-row"><span class="wname">Wed — Substack School</span><span class="wval">${fmtInt(d.webinars.wed)} · ${fmtPct1(d.webinars.wed_rate)}</span></div>
+        <div class="webinar-row"><span class="wname">Thu — IGNITE Her Frequencies</span><span class="wval">${fmtInt(d.webinars.thu)} · ${fmtPct1(d.webinars.thu_rate)}</span></div>
       </div>
       <div class="card">
         <h3>TGIM Email Engagement</h3>
@@ -476,33 +505,39 @@ function renderEngagement() {
         </div>
       </div>
     </div>
-    <div class="footnote" style="margin:4px 0 20px;">New metrics this week: Sales, Webinars and TGIM email rates.</div>
   `;
 }
 
-function renderRevenue() {
-  const d = DATA.current_week;
+function renderRevenue(period) {
+  const d = period.data;
   const s = d.sales_revenue;
   const m = d.merch;
-  const notesText = `Merch shop sales declined significantly this week: Total Sales ${fmtMoney(m.total_sales)} (${fmtPct1(m.total_sales_pct_change)}), Gross ${fmtMoney(m.gross)} (${fmtPct1(m.gross_pct_change)}), and Orders ${fmtInt(m.orders)} vs ${fmtInt(m.orders && m.orders_change !== null ? m.orders - m.orders_change : null)} last week, following a sales spike driven by the introduction of the new cards.`;
+  const isTrend = period.is_trend;
+  let notesBlock = '';
+  if (period.is_latest && m.total_sales_change !== null && m.total_sales_change !== undefined) {
+    const dir = m.total_sales_change > 0 ? 'increased' : (m.total_sales_change < 0 ? 'decreased' : 'held steady');
+    const priorOrders = (m.orders !== null && m.orders_change !== null) ? (m.orders - m.orders_change) : null;
+    const notesText = `Merch shop sales ${dir} vs last week: Total Sales ${fmtMoney(m.total_sales)} (${fmtPct1(m.total_sales_pct_change)}), Gross ${fmtMoney(m.gross)} (${fmtPct1(m.gross_pct_change)}), and Orders ${fmtInt(m.orders)} vs ${fmtInt(priorOrders)} last week.`;
+    notesBlock = `<div class="data-notes"><strong>Data Notes</strong>${notesText}</div>`;
+  }
   return `
-    <div class="data-notes"><strong>Data Notes</strong>${notesText}</div>
+    ${notesBlock}
     <div class="grid two">
       <div class="card">
-        <h3>Kajabi Revenue <span class="badge">${fmtMoney(s.kajabi.total_gross)} total</span></h3>
+        <h3>Kajabi Revenue <span class="badge">${fmtMoney(s.kajabi.total_gross)}${isTrend ? ' · 4-wk total' : ' total'}</span></h3>
         <div class="row"><span class="rlabel">IGNITE Her University</span><span class="rval">${fmtMoney(s.kajabi.ignite_her_university)}</span></div>
         <div class="row"><span class="rlabel">Quantum Leap Incubator</span><span class="rval">${fmtMoney(s.kajabi.quantum_leap_incubator)}</span></div>
         <div class="row"><span class="rlabel">Power Hour</span><span class="rval">${fmtMoney(s.kajabi.power_hour)}</span></div>
       </div>
       <div class="card">
-        <h3>Substack Revenue <span class="badge">${fmtMoney(s.substack.total)} total</span></h3>
+        <h3>Substack Revenue <span class="badge">${fmtMoney(s.substack.total)}${isTrend ? ' · 4-wk total' : ' total'}</span></h3>
         <div class="row"><span class="rlabel">Red Rebelle Room</span><span class="rval">${fmtMoney(s.substack.red_rebelle_room)}</span></div>
         <div class="row"><span class="rlabel">Soapbox</span><span class="rval">${fmtMoney(s.substack.soapbox)}</span></div>
       </div>
     </div>
     <div class="grid two">
       <div class="card">
-        <h3>Weekly Merch Shop Sales <span class="badge">Shopify</span></h3>
+        <h3>${isTrend ? 'Merch Shop Sales <span class="badge">4-Wk Total · Shopify</span>' : 'Weekly Merch Shop Sales <span class="badge">Shopify</span>'}</h3>
         <div class="row"><span class="rlabel">Gross</span><span class="rval">${fmtMoney(m.gross)} ${changeSpan(m.gross_change)}</span></div>
         <div class="row"><span class="rlabel">Net</span><span class="rval">${fmtMoney(m.net)} ${changeSpan(m.net_change)}</span></div>
         <div class="row"><span class="rlabel">Total Sales</span><span class="rval">${fmtMoney(m.total_sales)} ${changeSpan(m.total_sales_change)}</span></div>
@@ -514,7 +549,7 @@ function renderRevenue() {
       <div class="card">
         <h3>Called to Lead Tickets <span class="badge">Event</span></h3>
         <div class="row"><span class="rlabel">Total sold</span><span class="rval">${fmtInt(d.called_to_lead.total)} ${changeSpan(d.called_to_lead.total_change)}</span></div>
-        <div class="row"><span class="rlabel">New this week</span><span class="rval">${fmtInt(d.called_to_lead.new)}</span></div>
+        <div class="row"><span class="rlabel">New${isTrend ? ' (4-wk total)' : ' this week'}</span><span class="rval">${fmtInt(d.called_to_lead.new)}</span></div>
         <div class="row"><span class="rlabel">Goal</span><span class="rval">${d.called_to_lead.goal}</span></div>
         <div class="bar-track"><div class="bar-fill" style="width:${Math.min(100, d.called_to_lead.progress_pct)}%"></div></div>
         <div class="goal-note">${fmtPct1(d.called_to_lead.progress_pct)} of goal</div>
@@ -523,42 +558,77 @@ function renderRevenue() {
   `;
 }
 
-function renderScheduling() {
+function renderScheduling(period) {
+  const es = period.events_scheduling || { upcoming_events: [], need_to_schedule: [] };
   return `
     <div class="grid two">
       <div class="card">
         <h3>Upcoming Events</h3>
-        ${renderList(DATA.upcoming_events)}
+        ${renderList(es.upcoming_events)}
       </div>
       <div class="card">
         <h3>Need to Schedule</h3>
-        ${renderList(DATA.need_to_schedule)}
+        ${renderList(es.need_to_schedule)}
       </div>
     </div>
   `;
 }
 
-const TABS = [
+// "latestOnly" tabs (Scheduling) only appear when the selected period is the
+// latest completed week — CURRENT Events & Scheduling is current-state only
+// and is not meaningful for older weeks or the Last 4 Weeks trend view.
+const ALL_TABS = [
   { id: 'membership', label: 'Membership & Programs', render: renderMembership },
   { id: 'engagement', label: 'Community & Engagement', render: renderEngagement },
   { id: 'revenue', label: 'Revenue & Sales', render: renderRevenue },
-  { id: 'scheduling', label: 'Scheduling', render: renderScheduling },
+  { id: 'scheduling', label: 'Scheduling', render: renderScheduling, latestOnly: true },
 ];
 
+function activeTabs(period) {
+  return ALL_TABS.filter(t => !t.latestOnly || period.is_latest);
+}
+
+function legendText(period) {
+  if (period.is_trend) return 'Trend view — changes shown are net movement across the 4-week window (Aug 3–30): ↑ Increase · ↓ Decrease · — No change';
+  if (period.data.total_clients.change === null) return 'Earliest week on record — no prior week to compare against yet.';
+  return 'All changes are vs last week: ↑ Increase · ↓ Decrease · — No change';
+}
+
 function setTab(id) {
+  const period = getPeriod(ACTIVE_PERIOD_ID);
+  ACTIVE_TAB_ID = id;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === id));
-  const tab = TABS.find(t => t.id === id);
-  document.getElementById('app').innerHTML = tab.render();
+  const tab = ALL_TABS.find(t => t.id === id);
+  document.getElementById('app').innerHTML = tab.render(period);
   document.getElementById('sectionTitle').textContent = tab.label;
   document.getElementById('legendNote').style.display = (id === 'scheduling') ? 'none' : '';
 }
 
+function renderTabBar(period) {
+  const tabs = activeTabs(period);
+  if (!tabs.find(t => t.id === ACTIVE_TAB_ID)) ACTIVE_TAB_ID = tabs[0].id;
+  const tabBar = document.getElementById('tabBar');
+  tabBar.innerHTML = tabs.map(t => `<button class="tab-btn${t.id===ACTIVE_TAB_ID?' active':''}" data-tab="${t.id}">${t.label}</button>`).join('');
+}
+
+function renderPeriod(id) {
+  ACTIVE_PERIOD_ID = id;
+  const period = getPeriod(id);
+  document.getElementById('footerRange').textContent = period.range;
+  document.getElementById('hero').innerHTML = heroHTML(period);
+  document.getElementById('legendNote').textContent = legendText(period);
+  renderTabBar(period);
+  setTab(ACTIVE_TAB_ID);
+}
+
 function init() {
-  const d = DATA.current_week;
   document.getElementById('metaRow').innerHTML = `
     <div class="meta-left">
       <div class="weekly">Weekly Report</div>
-      <div class="prevweek">Previous Week: ${d.range}</div>
+      <div class="period-field">
+        <div class="label">Reporting Period</div>
+        <select id="periodSelect" class="period-select"></select>
+      </div>
     </div>
     <div class="meta-right">
       <div class="rd">
@@ -567,15 +637,20 @@ function init() {
       </div>
     </div>
   `;
-  document.getElementById('footerRange').textContent = d.range;
-  document.getElementById('hero').innerHTML = heroHTML(d);
+
+  const select = document.getElementById('periodSelect');
+  select.innerHTML = DATA.periods.map(p => `<option value="${p.id}">${p.label}</option>`).join('');
+  select.addEventListener('change', e => renderPeriod(e.target.value));
+
   const tabBar = document.getElementById('tabBar');
-  tabBar.innerHTML = TABS.map((t,i) => `<button class="tab-btn${i===0?' active':''}" data-tab="${t.id}">${t.label}</button>`).join('');
   tabBar.addEventListener('click', e => {
     const btn = e.target.closest('.tab-btn');
     if (btn) setTab(btn.dataset.tab);
   });
-  setTab(TABS[0].id);
+
+  const defaultPeriod = DATA.periods.find(p => p.is_latest) || DATA.periods[0];
+  select.value = defaultPeriod.id;
+  renderPeriod(defaultPeriod.id);
 }
 
 fetch('data.json?t=' + Date.now())
@@ -587,4 +662,3 @@ fetch('data.json?t=' + Date.now())
 </script>
 </body>
 </html>
-<!-- redeploy -->

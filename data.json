@@ -1,251 +1,773 @@
 {
-  "generated_at": "2026-08-26T14:53:49.310143Z",
-  "report_date_label": "Aug 24, 2026",
-  "current_week": {
-    "range": "8/17/26\u20138/23/26",
-    "compare_range": "8/10/26\u20138/16/26",
-    "baseline_source": "CEO_Dashboard_8_10-8_16_26.pdf (seed \u2014 workbook has no prior-week history)",
-    "what_moved_this_week": [
-      "\u2193 Ignite Her University - 1 Kristen Toscano (Coach School access revoked)",
-      "\u2191 Red Rebelle Room +3 joined the RRR last week",
-      "\u2193 IGNITE PROGRAMS -3 Mar Par Renewed into Red Rebelle Room from LAB | Donna Guichon - no response to renewal (Her Design Hub) | fixed error on spreadsheet - Donna Guichon being counted twice (Quantum Leap inqucator)"
-    ],
-    "what_moved_this_week_curated": [
-      "IGNITE Her University \u2193 1 \u2014 Kristen Toscano: Coach School access revoked.",
-      "Red Rebelle Room \u2191 3 \u2014 3 members joined RRR last week.",
-      "IGNITE Programs \u2193 3 \u2014 Mar Par renewed into Red Rebelle Room from LAB; Donna Guichon did not respond to renewal for Her Design Hub; spreadsheet correction removed a duplicate count for Donna Guichon in Quantum Leap Incubator."
-    ],
-    "total_clients": {
-      "value": 817.0,
-      "change": -1.0
-    },
-    "programs": {
-      "value": 229.0,
-      "change": -3.0,
-      "lab": {
-        "value": 130.0,
-        "change": -1.0
-      },
-      "launchpad": {
-        "value": 71.0,
-        "change": 0.0
-      },
-      "design_hub": {
-        "value": 0.0,
-        "change": -1.0
-      },
-      "incubator": {
-        "value": 28.0,
-        "change": -1.0
-      }
-    },
-    "university": {
-      "value": 389.0,
-      "change": -1.0,
-      "coach_school": {
-        "value": 103.0,
-        "change": -1.0
-      },
-      "ignite_her_university": {
-        "value": 286.0,
-        "change": 0.0
-      },
-      "access_suspended": 2.0,
-      "coach_school_access_revoked": 1.0
-    },
-    "red_rebelle": {
-      "value": 199.0,
-      "change": 3.0,
-      "drop": {
-        "value": 158.0,
-        "change": 0.0
-      },
-      "room": {
-        "value": 41.0,
-        "change": 3.0
-      }
-    },
-    "soapbox": {
-      "new": 1.0,
-      "monthly": 46.0,
-      "monthly_change": 0.0,
-      "yearly": 306.0,
-      "yearly_change": -5.0,
-      "total": 352.0,
-      "total_change": -5.0
-    },
-    "upsells": {
-      "ignite_her_u": {
-        "value": 0.0,
-        "change": 0.0
-      },
-      "power_hour": {
-        "value": 1.0,
-        "change": null
-      }
-    },
-    "renewals": {
-      "renewed": 1.0,
-      "not_renewing": 0.0,
-      "no_response": 0.0,
-      "up_for_renewal_raw": "9 (total august)",
-      "upcoming": {
-        "august": {
-          "total": 9,
-          "lab": 6,
-          "hub": 1,
-          "university": 2
+  "generated_at": "2026-09-02T01:55:27.351627Z",
+  "report_date_label": "Aug 31, 2026",
+  "periods": [
+    {
+      "id": "week_82426_83026",
+      "label": "Aug 24\u201330, 2026",
+      "range": "8/24/26\u20138/30/26",
+      "is_latest": true,
+      "is_trend": false,
+      "data": {
+        "range": "8/24/26\u20138/30/26",
+        "what_moved_this_week": [
+          "Red Rebelle Room \u2191 1 - 1 member joined the RRR",
+          "IGNITE PROGRAMS \u2193 1 -  Gaia Girus-Nowoczyn (IGNITE Her LAB) renewed RR Room"
+        ],
+        "total_clients": {
+          "value": 817.0,
+          "change": 0.0
         },
-        "september": {
-          "total": 110,
-          "lab": 8,
-          "incubator": 30,
-          "university": 72
-        }
-      },
-      "upcoming_source": "Carried from CEO_Dashboard_8_10-8_16_26.pdf per instruction \u2014 not tracked in the current workbook."
-    },
-    "called_to_lead": {
-      "total": 33.0,
-      "new": 3.0,
-      "goal": 50,
-      "progress_pct": 66.0,
-      "total_change": 3.0
-    },
-    "daily_frequency": {
-      "kajabi_avg": 346.6,
-      "kajabi_change": 36.8,
-      "substack_avg": 169.0,
-      "substack_change": 18.8
-    },
-    "action_tracker": {
-      "value": 31.0,
-      "change": 9.0
-    },
-    "radio": {
-      "value": 73.67,
-      "change": -0.3
-    },
-    "merch": {
-      "gross": 633.19,
-      "net": 395.0,
-      "total_sales": 499.48,
-      "orders_raw": "8 (9 Fulfilled)",
-      "orders": 8.0,
-      "orders_change": -49.0,
-      "aov": 49.37,
-      "returning": 0.125,
-      "top_sellers": "IGNITE Her Frequencies\u2122 Card Decks",
-      "total_sales_change": -1943.2,
-      "total_sales_pct_change": -79.6,
-      "gross_change": -3790.1,
-      "gross_pct_change": -85.7,
-      "net_change": -1416.6,
-      "aov_change": 16.2,
-      "returning_change_pts": -9.3
-    },
-    "sales_revenue": {
-      "kajabi": {
-        "ignite_her_university": 5314.5,
-        "quantum_leap_incubator": 2069.74,
-        "power_hour": 299.0,
-        "total_gross": 7683.24
-      },
-      "substack": {
-        "red_rebelle_room": 1197.0,
-        "soapbox": 229.68,
-        "total": 1426.68
-      }
-    },
-    "webinars": {
-      "tracie_tuesday": 73.0,
-      "tracie_tuesday_rate": 18.8,
-      "substack_review_wed": 169.0,
-      "substack_review_wed_rate": 14.5,
-      "frequencies_thu": 81.0,
-      "frequencies_thu_rate": 20.8
-    },
-    "tgim": {
-      "university_open": 0.49,
-      "university_click": 0.03,
-      "other_open": 0.53,
-      "other_click": 0.05,
-      "soapbox_open": 0.58,
-      "soapbox_click": 0.02
-    },
-    "coach_school_certifications": 10,
-    "power_hour_count": 1.0,
-    "_baseline_export": {
-      "week_range": "8/17/26\u20138/23/26",
-      "total_clients": 817.0,
-      "programs_total": 229.0,
-      "university_total": 389.0,
-      "red_rebelle_total": 199.0,
-      "lab.total_active": 130.0,
-      "launchpad.total_active": 71.0,
-      "design_hub.total_active": 0.0,
-      "incubator.total_active": 28.0,
-      "coach.total_active": 103.0,
-      "univ.total_active": 286.0,
-      "rr.drop": 158.0,
-      "rr.room": 41.0,
-      "soapbox.new": 1.0,
-      "soapbox.monthly": 46.0,
-      "soapbox.yearly": 306.0,
-      "soapbox.total": 352.0,
-      "called_to_lead.total": 33.0,
-      "called_to_lead.new": 3.0,
-      "engagement.df_kajabi_avg": 346.6,
-      "engagement.df_substack_avg": 169.0,
-      "engagement.action_tracker": 31.0,
-      "engagement.radio_avg": 73.67,
-      "merch.gross": 633.19,
-      "merch.net": 395.0,
-      "merch.total_sales": 499.48,
-      "merch.aov": 49.37,
-      "merch.returning": 0.125,
-      "merch.orders": 8.0,
-      "upgrades.university": 0.0,
-      "renewals.renewed": 1.0,
-      "renewals.not_renewing": 0.0,
-      "renewals.no_response": 0.0,
-      "renewals.upcoming": {
-        "august": {
-          "total": 9,
-          "lab": 6,
-          "hub": 1,
-          "university": 2
+        "programs": {
+          "value": 228.0,
+          "change": -1.0
         },
-        "september": {
-          "total": 110,
-          "lab": 8,
-          "incubator": 30,
-          "university": 72
-        }
+        "university": {
+          "value": 389.0,
+          "change": 0.0,
+          "coach_school": {
+            "value": 103.0,
+            "change": 0.0
+          },
+          "ignite_her_university": {
+            "value": 286.0,
+            "change": 0.0
+          },
+          "coach_school_access_revoked": 0.0
+        },
+        "red_rebelle": {
+          "value": 200.0,
+          "change": 1.0,
+          "drop": {
+            "value": 158.0,
+            "change": 0.0
+          },
+          "room": {
+            "value": 42.0,
+            "change": 1.0
+          }
+        },
+        "soapbox": {
+          "new": 1.0,
+          "monthly": 45.0,
+          "monthly_change": -1.0,
+          "yearly": 307.0,
+          "yearly_change": 1.0,
+          "total": 352.0,
+          "total_change": 0.0
+        },
+        "upsells": {
+          "ignite_her_u": {
+            "value": 0.0,
+            "change": 0.0
+          },
+          "power_hour": {
+            "value": 0.0,
+            "change": -1.0
+          }
+        },
+        "renewals": {
+          "renewed": 1.0,
+          "not_renewing": 0.0,
+          "no_response": 0.0,
+          "up_for_renewal_raw": null
+        },
+        "called_to_lead": {
+          "total": 35.0,
+          "new": 2.0,
+          "goal": 50,
+          "progress_pct": 70.0,
+          "total_change": 2.0
+        },
+        "daily_frequency": {
+          "kajabi_avg": 331.2,
+          "kajabi_change": -15.4,
+          "substack_avg": 140.2,
+          "substack_change": -28.8
+        },
+        "action_tracker": {
+          "value": 28.0,
+          "change": -3.0
+        },
+        "radio": {
+          "value": 71.67,
+          "change": -2.0
+        },
+        "merch": {
+          "gross": 677.48,
+          "net": 440.48,
+          "total_sales": 519.74,
+          "orders_raw": "7 (7 Fulfilled)",
+          "orders": 7.0,
+          "orders_change": -1.0,
+          "aov": 62.92,
+          "returning": 0.1428,
+          "discount": 237.0,
+          "returning_count": 1.0,
+          "customers_count": 7.0,
+          "top_sellers": "IGNITE Her Frequencies\u2122 Card Decks",
+          "total_sales_change": 20.3,
+          "total_sales_pct_change": 4.1,
+          "gross_change": 44.3,
+          "gross_pct_change": 7.0,
+          "net_change": 45.5,
+          "aov_change": 13.6,
+          "returning_change_pts": 1.8
+        },
+        "sales_revenue": {
+          "kajabi": {
+            "ignite_her_university": 16923.0,
+            "quantum_leap_incubator": 478.0,
+            "power_hour": 0.0,
+            "total_gross": 17401.0
+          },
+          "substack": {
+            "red_rebelle_room": 0.0,
+            "soapbox": 70.83,
+            "total": 70.83
+          }
+        },
+        "webinars": {
+          "tue": 76.0,
+          "tue_rate": 19.5,
+          "wed": 90.0,
+          "wed_rate": 7.7,
+          "thu": 73.0,
+          "thu_rate": 18.8
+        },
+        "tgim": {
+          "university_open": 0.54,
+          "university_click": 0.05,
+          "other_open": 0.64,
+          "other_click": 0.07,
+          "soapbox_open": 0.57,
+          "soapbox_click": 0.08
+        },
+        "coach_school_certifications": 5.0,
+        "power_hour_count": 0.0
+      },
+      "what_moved": [
+        "Red Rebelle Room \u2191 1 - 1 member joined the RRR",
+        "IGNITE PROGRAMS \u2193 1 -  Gaia Girus-Nowoczyn (IGNITE Her LAB) renewed RR Room"
+      ],
+      "events_scheduling": {
+        "upcoming_events": [
+          "Strategic Partnership Bonus Session (Jan \u2013 Ambassadors) \u2013 Julie to record",
+          "IGNITE  Her State of U - 9/9/26",
+          "Substack Audit (PIF Sheet with Substack & Maia Links)",
+          "Called to Lead Pre-Party (In person) \u2013 9/30/26"
+        ],
+        "need_to_schedule": [
+          "AI Masterclass for Solopreneurs with Brooke Shelton (University) \u2013 TBD",
+          "50 Not Finished Brand Builder (Jan. PIF Bonus) \u2013 TBD",
+          "Trademark/IP (LAB bonus, during LAB session) \u2013 TBD",
+          "Create a 10-Part Audio Series to Sell High Ticket Offers w/ Tara Counterman (launch bonus)",
+          "Sept Light Launch \u2013 TBD",
+          "Chiron Workshop (tentatively scheduled for 9/24/26)"
+        ]
       }
+    },
+    {
+      "id": "week_81726_82326",
+      "label": "Aug 17\u201323, 2026",
+      "range": "8/17/26\u20138/23/26",
+      "is_latest": false,
+      "is_trend": false,
+      "data": {
+        "range": "8/17/26\u20138/23/26",
+        "what_moved_this_week": [
+          "IGNITE Her University \u2193 1 \u2014 Kristen Toscano: Coach School access revoked.",
+          "Red Rebelle Room \u2191 3 \u2014 3 members joined RRR last week.",
+          "IGNITE Programs \u2193 3 \u2014 Mar Par renewed into Red Rebelle Room from LAB; Donna Guichon did not respond to renewal for Her Design Hub; spreadsheet correction removed a duplicate count for Donna Guichon in Quantum Leap Incubator."
+        ],
+        "total_clients": {
+          "value": 817.0,
+          "change": -1.0
+        },
+        "programs": {
+          "value": 229.0,
+          "change": -3.0
+        },
+        "university": {
+          "value": 389.0,
+          "change": -1.0,
+          "coach_school": {
+            "value": 103.0,
+            "change": -1.0
+          },
+          "ignite_her_university": {
+            "value": 286.0,
+            "change": 0.0
+          },
+          "coach_school_access_revoked": 1.0
+        },
+        "red_rebelle": {
+          "value": 199.0,
+          "change": 3.0,
+          "drop": {
+            "value": 158.0,
+            "change": 0.0
+          },
+          "room": {
+            "value": 41.0,
+            "change": 3.0
+          }
+        },
+        "soapbox": {
+          "new": 1.0,
+          "monthly": 46.0,
+          "monthly_change": 0.0,
+          "yearly": 306.0,
+          "yearly_change": -5.0,
+          "total": 352.0,
+          "total_change": -5.0
+        },
+        "upsells": {
+          "ignite_her_u": {
+            "value": 0.0,
+            "change": 0.0
+          },
+          "power_hour": {
+            "value": 1.0,
+            "change": 0.0
+          }
+        },
+        "renewals": {
+          "renewed": 1.0,
+          "not_renewing": 0.0,
+          "no_response": 0.0,
+          "up_for_renewal_raw": null
+        },
+        "called_to_lead": {
+          "total": 33.0,
+          "new": 3.0,
+          "goal": 50,
+          "progress_pct": 66.0,
+          "total_change": 3.0
+        },
+        "daily_frequency": {
+          "kajabi_avg": 346.6,
+          "kajabi_change": 36.8,
+          "substack_avg": 169.0,
+          "substack_change": 18.8
+        },
+        "action_tracker": {
+          "value": 31.0,
+          "change": 9.0
+        },
+        "radio": {
+          "value": 73.67,
+          "change": -0.3
+        },
+        "merch": {
+          "gross": 633.19,
+          "net": 395.0,
+          "total_sales": 499.48,
+          "orders_raw": "8 (9 Fulfilled)",
+          "orders": 8.0,
+          "orders_change": -49.0,
+          "aov": 49.37,
+          "returning": 0.125,
+          "discount": 238.19,
+          "returning_count": 1.0,
+          "customers_count": 8.0,
+          "top_sellers": "IGNITE Her Frequencies\u2122 Card Decks",
+          "total_sales_change": -1943.2,
+          "total_sales_pct_change": -79.6,
+          "gross_change": -3790.1,
+          "gross_pct_change": -85.7,
+          "net_change": -1416.6,
+          "aov_change": 16.2,
+          "returning_change_pts": -9.3
+        },
+        "sales_revenue": {
+          "kajabi": {
+            "ignite_her_university": 5314.5,
+            "quantum_leap_incubator": 2069.74,
+            "power_hour": 299.0,
+            "total_gross": 7683.24
+          },
+          "substack": {
+            "red_rebelle_room": 1197.0,
+            "soapbox": 229.68,
+            "total": 1426.68
+          }
+        },
+        "webinars": {
+          "tue": 73.0,
+          "tue_rate": 18.8,
+          "wed": 169.0,
+          "wed_rate": 14.5,
+          "thu": 81.0,
+          "thu_rate": 20.8
+        },
+        "tgim": {
+          "university_open": 0.49,
+          "university_click": 0.03,
+          "other_open": 0.53,
+          "other_click": 0.05,
+          "soapbox_open": 0.58,
+          "soapbox_click": 0.02
+        },
+        "coach_school_certifications": 10.0,
+        "power_hour_count": 1.0
+      },
+      "what_moved": [
+        "IGNITE Her University \u2193 1 \u2014 Kristen Toscano: Coach School access revoked.",
+        "Red Rebelle Room \u2191 3 \u2014 3 members joined RRR last week.",
+        "IGNITE Programs \u2193 3 \u2014 Mar Par renewed into Red Rebelle Room from LAB; Donna Guichon did not respond to renewal for Her Design Hub; spreadsheet correction removed a duplicate count for Donna Guichon in Quantum Leap Incubator."
+      ],
+      "events_scheduling": null
+    },
+    {
+      "id": "week_81026_81626",
+      "label": "Aug 10\u201316, 2026",
+      "range": "8/10/26\u20138/16/26",
+      "is_latest": false,
+      "is_trend": false,
+      "data": {
+        "range": "8/10/26\u20138/16/26",
+        "what_moved_this_week": [
+          "Ignite Her University \u2191 1 - spreadsheet correction",
+          "Red Rebelle Room \u2191  1 - Bente Eskerod \u2014 June LAB renewal who has now joined the Red Rebelle Room",
+          "Ignite Programs \u2193 1 - spreadsheet correction (Quantum Leap Incubator)"
+        ],
+        "total_clients": {
+          "value": 818.0,
+          "change": 1.0
+        },
+        "programs": {
+          "value": 232.0,
+          "change": -1.0
+        },
+        "university": {
+          "value": 390.0,
+          "change": 1.0,
+          "coach_school": {
+            "value": 104.0,
+            "change": 2.0
+          },
+          "ignite_her_university": {
+            "value": 286.0,
+            "change": -1.0
+          },
+          "coach_school_access_revoked": 0.0
+        },
+        "red_rebelle": {
+          "value": 196.0,
+          "change": 1.0,
+          "drop": {
+            "value": 158.0,
+            "change": 0.0
+          },
+          "room": {
+            "value": 38.0,
+            "change": 1.0
+          }
+        },
+        "soapbox": {
+          "new": 4.0,
+          "monthly": 46.0,
+          "monthly_change": -2.0,
+          "yearly": 311.0,
+          "yearly_change": 4.0,
+          "total": 357.0,
+          "total_change": 2.0
+        },
+        "upsells": {
+          "ignite_her_u": {
+            "value": 0.0,
+            "change": 0.0
+          },
+          "power_hour": {
+            "value": 1.0,
+            "change": 1.0
+          }
+        },
+        "renewals": {
+          "renewed": 1.0,
+          "not_renewing": 0.0,
+          "no_response": 0.0,
+          "up_for_renewal_raw": null
+        },
+        "called_to_lead": {
+          "total": 30.0,
+          "new": 4.0,
+          "goal": 50,
+          "progress_pct": 60.0,
+          "total_change": 4.0
+        },
+        "daily_frequency": {
+          "kajabi_avg": 309.8,
+          "kajabi_change": -54.0,
+          "substack_avg": 150.2,
+          "substack_change": -46.0
+        },
+        "action_tracker": {
+          "value": 22.0,
+          "change": 6.0
+        },
+        "radio": {
+          "value": 74.0,
+          "change": -19.3
+        },
+        "merch": {
+          "gross": 4423.27,
+          "net": 1811.57,
+          "total_sales": 2442.72,
+          "orders_raw": "57 (58 Fulfilled)",
+          "orders": 57.0,
+          "orders_change": 53.0,
+          "aov": 33.16,
+          "returning": 0.2181,
+          "discount": 2532.7,
+          "returning_count": 12.0,
+          "customers_count": 55.0,
+          "top_sellers": "IGNITE Her Frequencies Card\n50 Not Finished Travel Mug\nRed Rebelle Boxy T-shirt",
+          "total_sales_change": 2204.2,
+          "total_sales_pct_change": 924.1,
+          "gross_change": 4212.2,
+          "gross_pct_change": 1995.3,
+          "net_change": 1600.5,
+          "aov_change": -19.6,
+          "returning_change_pts": 21.8
+        },
+        "sales_revenue": {
+          "kajabi": {
+            "ignite_her_university": 22149.0,
+            "quantum_leap_incubator": 0.0,
+            "power_hour": 299.0,
+            "total_gross": 22448.0
+          },
+          "substack": {
+            "red_rebelle_room": 798.0,
+            "soapbox": 553.74,
+            "total": 1351.74
+          }
+        },
+        "webinars": {
+          "tue": 66.0,
+          "tue_rate": 16.9,
+          "wed": 70.0,
+          "wed_rate": 6.0,
+          "thu": 58.0,
+          "thu_rate": 14.9
+        },
+        "tgim": {
+          "university_open": 0.49,
+          "university_click": 0.05,
+          "other_open": 0.57,
+          "other_click": 0.09,
+          "soapbox_open": 0.6,
+          "soapbox_click": 0.04
+        },
+        "coach_school_certifications": 15.0,
+        "power_hour_count": 1.0
+      },
+      "what_moved": [
+        "Ignite Her University \u2191 1 - spreadsheet correction",
+        "Red Rebelle Room \u2191  1 - Bente Eskerod \u2014 June LAB renewal who has now joined the Red Rebelle Room",
+        "Ignite Programs \u2193 1 - spreadsheet correction (Quantum Leap Incubator)"
+      ],
+      "events_scheduling": null
+    },
+    {
+      "id": "week_8326_8926",
+      "label": "Aug 3\u20139, 2026",
+      "range": "8/3/26\u20138/9/26",
+      "is_latest": false,
+      "is_trend": false,
+      "data": {
+        "range": "8/3/26\u20138/9/26",
+        "what_moved_this_week": [
+          "No movement this week"
+        ],
+        "total_clients": {
+          "value": 817.0,
+          "change": null
+        },
+        "programs": {
+          "value": 233.0,
+          "change": null
+        },
+        "university": {
+          "value": 389.0,
+          "change": null,
+          "coach_school": {
+            "value": 102.0,
+            "change": null
+          },
+          "ignite_her_university": {
+            "value": 287.0,
+            "change": null
+          },
+          "coach_school_access_revoked": 0.0
+        },
+        "red_rebelle": {
+          "value": 195.0,
+          "change": null,
+          "drop": {
+            "value": 158.0,
+            "change": null
+          },
+          "room": {
+            "value": 37.0,
+            "change": null
+          }
+        },
+        "soapbox": {
+          "new": 1.0,
+          "monthly": 48.0,
+          "monthly_change": null,
+          "yearly": 307.0,
+          "yearly_change": null,
+          "total": 355.0,
+          "total_change": null
+        },
+        "upsells": {
+          "ignite_her_u": {
+            "value": 0.0,
+            "change": null
+          },
+          "power_hour": {
+            "value": 0.0,
+            "change": null
+          }
+        },
+        "renewals": {
+          "renewed": 0.0,
+          "not_renewing": 1.0,
+          "no_response": 3.0,
+          "up_for_renewal_raw": "9 (total august)"
+        },
+        "called_to_lead": {
+          "total": 26.0,
+          "new": 0.0,
+          "goal": 50,
+          "progress_pct": 52.0,
+          "total_change": null
+        },
+        "daily_frequency": {
+          "kajabi_avg": 363.8,
+          "kajabi_change": null,
+          "substack_avg": 196.2,
+          "substack_change": null
+        },
+        "action_tracker": {
+          "value": 16.0,
+          "change": null
+        },
+        "radio": {
+          "value": 93.33,
+          "change": null
+        },
+        "merch": {
+          "gross": 211.1,
+          "net": 211.1,
+          "total_sales": 238.52,
+          "orders_raw": "4 (5 Fulfilled)",
+          "orders": 4.0,
+          "orders_change": null,
+          "aov": 52.77,
+          "returning": 0.0,
+          "discount": 0.0,
+          "returning_count": 0.0,
+          "customers_count": 4.0,
+          "top_sellers": "Last Chance Cards\nRed Rebelle Boxy T-shirt\nNerd Herd V-neck",
+          "total_sales_change": null,
+          "total_sales_pct_change": null,
+          "gross_change": null,
+          "gross_pct_change": null,
+          "net_change": null,
+          "aov_change": null,
+          "returning_change_pts": null
+        },
+        "sales_revenue": {
+          "kajabi": {
+            "ignite_her_university": 1999.0,
+            "quantum_leap_incubator": 0.0,
+            "power_hour": 0.0,
+            "total_gross": 1999.0
+          },
+          "substack": {
+            "red_rebelle_room": 0.0,
+            "soapbox": 119.25,
+            "total": 119.25
+          }
+        },
+        "webinars": {
+          "tue": 97.0,
+          "tue_rate": 24.9,
+          "wed": 86.0,
+          "wed_rate": 7.3,
+          "thu": 190.0,
+          "thu_rate": 48.8
+        },
+        "tgim": {
+          "university_open": 0.52,
+          "university_click": 0.05,
+          "other_open": 0.63,
+          "other_click": 0.07,
+          "soapbox_open": null,
+          "soapbox_click": null
+        },
+        "coach_school_certifications": 0.0,
+        "power_hour_count": 0.0
+      },
+      "what_moved": [
+        "No movement this week"
+      ],
+      "events_scheduling": null
+    },
+    {
+      "id": "trend_last4",
+      "label": "Last 4 Weeks",
+      "range": "8/3/26\u20138/30/26",
+      "is_latest": false,
+      "is_trend": true,
+      "data": {
+        "range": "8/3/26\u20138/30/26",
+        "what_moved_this_week": [],
+        "total_clients": {
+          "value": 817.0,
+          "change": 0.0
+        },
+        "programs": {
+          "value": 228.0,
+          "change": -5.0
+        },
+        "university": {
+          "value": 389.0,
+          "change": 0.0,
+          "coach_school": {
+            "value": 103.0,
+            "change": 1.0
+          },
+          "ignite_her_university": {
+            "value": 286.0,
+            "change": -1.0
+          },
+          "coach_school_access_revoked": 1.0
+        },
+        "red_rebelle": {
+          "value": 200.0,
+          "change": 5.0,
+          "drop": {
+            "value": 158.0,
+            "change": 0.0
+          },
+          "room": {
+            "value": 42.0,
+            "change": 5.0
+          }
+        },
+        "soapbox": {
+          "new": 7.0,
+          "monthly": 45.0,
+          "monthly_change": -3.0,
+          "yearly": 307.0,
+          "yearly_change": 0.0,
+          "total": 352.0,
+          "total_change": -3.0
+        },
+        "upsells": {
+          "ignite_her_u": {
+            "value": 0.0,
+            "change": null
+          },
+          "power_hour": {
+            "value": 2.0,
+            "change": null
+          }
+        },
+        "renewals": {
+          "renewed": 3.0,
+          "not_renewing": 1.0,
+          "no_response": 3.0,
+          "up_for_renewal_raw": null
+        },
+        "called_to_lead": {
+          "total": 35.0,
+          "new": 9.0,
+          "goal": 50,
+          "progress_pct": 70.0,
+          "total_change": 9.0
+        },
+        "daily_frequency": {
+          "kajabi_avg": 337.9,
+          "kajabi_change": -32.6,
+          "substack_avg": 163.9,
+          "substack_change": -56.0
+        },
+        "action_tracker": {
+          "value": 97.0,
+          "change": null
+        },
+        "radio": {
+          "value": 78.2,
+          "change": -21.7
+        },
+        "merch": {
+          "gross": 5945.0,
+          "net": 2858.2,
+          "total_sales": 3700.5,
+          "orders_raw": "76 (period total)",
+          "orders": 76.0,
+          "orders_change": null,
+          "aov": 38.65,
+          "returning": 0.1891891891891892,
+          "top_sellers": "IGNITE Her Frequencies\u2122 Card Decks",
+          "total_sales_change": null,
+          "total_sales_pct_change": null,
+          "gross_change": null,
+          "gross_pct_change": null,
+          "net_change": null,
+          "aov_change": null,
+          "returning_change_pts": null
+        },
+        "sales_revenue": {
+          "kajabi": {
+            "ignite_her_university": 46385.5,
+            "quantum_leap_incubator": 2547.7,
+            "power_hour": 598.0,
+            "total_gross": 49531.2
+          },
+          "substack": {
+            "red_rebelle_room": 1995.0,
+            "soapbox": 973.5,
+            "total": 2968.5
+          }
+        },
+        "webinars": {
+          "tue": 78.0,
+          "tue_rate": 20.0,
+          "wed": 103.8,
+          "wed_rate": 8.9,
+          "thu": 100.5,
+          "thu_rate": 25.8
+        },
+        "tgim": {
+          "university_open": 0.51,
+          "university_click": 0.045,
+          "other_open": 0.5925,
+          "other_click": 0.07,
+          "soapbox_open": 0.5833,
+          "soapbox_click": 0.0467
+        },
+        "coach_school_certifications": 30.0,
+        "power_hour_count": 2.0
+      },
+      "what_moved": [],
+      "events_scheduling": null
     }
-  },
-  "upcoming_events": [
-    "Strategic Partnership Bonus Session (Jan \u2013 Ambassadors) \u2013 Julie to record",
-    "Substack Audit (PIF Sheet with Substack & Maia Links)",
-    "Called to Lead Pre-Party (In person) \u2013 9/30/26"
-  ],
-  "need_to_schedule": [
-    "AI Masterclass for Solopreneurs with Brooke Shelton (University) \u2013 TBD",
-    "50 Not Finished Brand Builder (Jan. PIF Bonus) \u2013 TBD",
-    "Trademark/IP (LAB bonus, during LAB session) \u2013 TBD",
-    "Create a 10-Part Audio Series to Sell High Ticket Offers w/ Tara Counterman (launch bonus)",
-    "Sept Light Launch \u2013 TBD",
-    "Chiron Workshop (tentatively scheduled for 9/24/26)"
   ],
   "flags": [
-    "This week's Renewed/Not Renewing/No Response counts in the workbook (1/0/0) are identical to last week's \u2014 please confirm these were actually updated for this week and aren't a stale carry-over.",
-    "Workbook cell 'Total Members up for Renewal' still reads \"9 (total august)\", the same as last week \u2014 confirm whether August renewals have moved since then, since it's now late August.",
-    "Called to Lead: this week's workbook Total (33) is LOWER than the real-time count (34) noted in last week's report as of 8/17 \u2014 a cumulative ticket count usually shouldn't drop; please confirm whether a ticket was cancelled/refunded or this is a data entry issue."
+    "[8/17/26\u20138/23/26] Renewed/Not Renewing/No Response counts are identical to the prior week \u2014 please confirm these were actually updated and aren't a stale carry-over.",
+    "[8/24/26\u20138/30/26] Renewed/Not Renewing/No Response counts are identical to the prior week \u2014 please confirm these were actually updated and aren't a stale carry-over.",
+    "'Total Members up for Renewal' only has a value in the oldest week column (Aug 3-9) and is blank for every later week \u2014 this figure isn't being kept current, so it's shown only where the workbook has it and omitted elsewhere."
   ],
   "notes": {
-    "tracking_scope": "As of 8/17/26, this dashboard tracks only the newest completed week \u2014 multi-week trend tracking has been paused per instruction.",
-    "renewals_upcoming": "Carried from CEO_Dashboard_8_10-8_16_26.pdf per instruction \u2014 not tracked in the current workbook.",
-    "sales_revenue": "Sales (Kajabi/Substack revenue), Webinars, TGIM email rates, Coach School Certifications and Power Hour count are new fields added to the workbook this week \u2014 no prior-week comparison exists yet for these."
+    "tracking_scope": "Tracks the newest 4 completed Mon\u2013Sun weeks present in the workbook, selectable via the Reporting Period dropdown, plus a Last 4 Weeks trend view.",
+    "webinar_categories": "Webinar categories are standardized as Tue \u2014 Business Support, Wed \u2014 Substack School, Thu \u2014 IGNITE Her Frequencies, matching the workbook's own row labels."
   }
 }
