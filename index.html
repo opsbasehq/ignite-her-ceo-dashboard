@@ -142,6 +142,7 @@
   }
   .hero .comp .k{font-size:12px;text-transform:uppercase;letter-spacing:.05em;font-weight:700;color:var(--ink-secondary);}
   .hero .comp .ksub{font-size:11.5px;color:var(--ink-muted);margin-top:2px;}
+  .hero .comp .ksub.ksub-tight{font-size:10px;white-space:nowrap;letter-spacing:-.005em;}
   .hero .comp .v{font-size:28px;font-weight:700;font-family:'Fraunces',serif;color:var(--ink);margin-top:8px;}
   .hero .comp .c{font-size:13px;font-weight:700;margin-top:4px;}
   .hero .comp .c.good{color:var(--good);}
@@ -170,7 +171,7 @@
   .pulse-item .prow .plabel{color:var(--ink-secondary);font-weight:600;min-width:58px;}
   .pulse-item .prow .pval{font-weight:700;}
 
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px;}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px;align-items:start;}
   .grid.two{grid-template-columns:repeat(2,1fr);}
   .grid.three{grid-template-columns:repeat(3,1fr);}
   @media (max-width:860px){.grid,.grid.two,.grid.three{grid-template-columns:1fr;}}
@@ -201,6 +202,18 @@
   .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:6px 0;font-size:15.5px;}
   .row .rlabel{color:var(--ink-secondary);flex:1;min-width:0;}
   .row .rval{font-weight:700;color:var(--ink);white-space:nowrap;flex-shrink:0;}
+  /* Compact variant for a supporting KPI row placed right under a chart-card
+     title (e.g. "New Subscribers" under Substack Soapbox) — smaller and
+     tighter than a normal .row so it doesn't compete with the chart below it. */
+  .row-tight{font-size:12.5px;padding:2px 0;}
+  .row-tight .rval{font-size:13px;}
+  /* Compact inline "Label 6" note under a chart-card title, used instead of
+     a full-width .row when the row would otherwise sit crowded right next
+     to the card's own top-right value (e.g. Substack Soapbox next to its
+     own total) — label and value stay close together instead of spreading
+     to fill a narrow left column. */
+  .chart-kpi-line{font-size:12.5px;color:var(--ink-secondary);margin-top:2px;}
+  .chart-kpi-line strong{color:var(--ink);font-weight:700;margin-left:5px;font-size:13px;}
   .row-emph .rlabel{font-weight:600;color:var(--ink);}
   .row-emph .rval{font-size:19px;color:var(--maroon);}
   .stat{display:flex;align-items:baseline;gap:10px;margin-bottom:2px;}
@@ -209,7 +222,7 @@
   .chg.good{color:var(--good);}
   .chg.bad{color:var(--bad);}
   .chg.flat{color:var(--flat);}
-  .footnote{font-size:13px;color:var(--ink-muted);margin-top:10px;line-height:1.55;}
+  .footnote{font-size:13px;color:var(--ink-muted);margin-top:10px;line-height:1.55;white-space:pre-line;}
   .footnote-top{margin-top:-2px;margin-bottom:10px;}
   .list-simple{margin:0;padding:0;list-style:none;}
   .list-simple li{font-size:15px;padding:8px 0;border-top:1px solid var(--line);color:var(--ink-secondary);line-height:1.5;}
@@ -251,6 +264,100 @@
   .tgim-block .tgim-label{font-weight:700;font-size:14.5px;color:var(--ink);margin-bottom:4px;}
   footer.meta{margin-top:36px;font-size:13px;color:var(--ink-muted);text-align:center;}
   .empty{color:var(--ink-muted);font-size:14.5px;font-style:italic;}
+
+  /* Last 4 Weeks charts (bar / stacked bar / grouped bar / line) */
+  .chart-card{padding-bottom:12px;}
+  .chart-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;}
+  .chart-head-left{min-width:0;flex:1;}
+  .chart-head h3{margin:0;font-size:14.5px;color:var(--maroon);font-weight:700;text-transform:uppercase;letter-spacing:.03em;line-height:1.25;}
+  .chart-value{font-family:'Fraunces',serif;font-size:25px;font-weight:600;color:var(--maroon-dark);white-space:nowrap;line-height:1.15;text-align:right;flex-shrink:0;}
+  .chart-value .chg{display:block;font-family:'Inter',system-ui,sans-serif;font-size:12.5px;margin-top:3px;}
+  .chart-value .val-caption{display:block;font-family:'Inter',system-ui,sans-serif;font-size:11.5px;font-weight:700;margin-top:3px;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.03em;}
+  .chart-sub{font-size:12px;color:var(--ink-muted);margin:3px 0 0;font-style:italic;line-height:1.25;}
+  .chart-sub:empty{display:none;}
+  .chart-legend{display:flex;gap:8px 14px;margin:6px 0 0;flex-wrap:wrap;}
+  .chart-legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink-secondary);font-weight:600;white-space:nowrap;}
+  .chart-swatch{width:11px;height:11px;border-radius:3px;display:inline-block;flex-shrink:0;}
+  .chart-swatch.is-line{border-radius:50%;}
+
+  /* Chart plot: a numeric y-axis column + a gridlined plot area, matching the
+     old dashboard's axis style. No value is ever printed on the chart itself —
+     exact numbers only ever show in the hover/click tooltip and the View data
+     table. Bars/lines are scaled against "nice" round-number axis ticks
+     (niceTicks()) so gridlines land on clean values (0, 200, 400, ...). */
+  .wk-plot{display:flex;gap:8px;margin-top:8px;}
+  .wk-yaxis{position:relative;width:36px;flex-shrink:0;}
+  .wk-ytick{position:absolute;left:0;right:4px;transform:translateY(50%);font-size:10.5px;color:var(--ink-muted);text-align:right;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums;}
+  .wk-plotarea{
+    position:relative;flex:1;min-width:0;
+    background-image:repeating-linear-gradient(to top, var(--line) 0, var(--line) 1px, transparent 1px, transparent var(--wk-grid-step));
+  }
+  .wk-chart{position:absolute;inset:0;display:flex;align-items:flex-end;gap:8px;padding:0 4px;}
+  .wk-col{flex:1;min-width:0;height:100%;display:flex;justify-content:center;}
+  .wk-axis-row{display:flex;gap:8px;margin-top:8px;}
+  .wk-yaxis-spacer{width:36px;flex-shrink:0;}
+  .wk-axis-labels{flex:1;min-width:0;display:flex;padding:0 4px;}
+  .wk-col-label{flex:1;min-width:0;font-size:12px;color:var(--ink-muted);text-align:center;line-height:1.3;}
+  .wk-col-label.is-latest{color:var(--ink);font-weight:700;}
+
+  .wk-hit{
+    width:100%;max-width:34px;margin:0 auto;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;
+    cursor:pointer;border-radius:5px 5px 0 0;
+  }
+  .wk-bar-area{
+    width:100%;height:100%;display:flex;flex-direction:column;justify-content:flex-end;
+    border-radius:5px 5px 0 0;overflow:hidden;transition:filter .1s;
+  }
+  .wk-hit:hover .wk-bar-area,.wk-hit:focus-visible .wk-bar-area{filter:brightness(1.1);}
+  .wk-hit:focus-visible{outline:2px solid var(--maroon-light);outline-offset:2px;}
+  .wk-seg{width:100%;}
+  .wk-seg+.wk-seg{border-top:2px solid var(--card);}
+  .wk-seg-null{
+    background-image:repeating-linear-gradient(45deg, var(--ink-muted) 0, var(--ink-muted) 1.5px, transparent 1.5px, transparent 6px);
+    background-color:var(--cream);border:1px dashed var(--ink-muted);box-sizing:border-box;opacity:.6;
+  }
+
+  /* Grouped bars (Webinar Unique Viewers — separate, non-stacked categories) */
+  .wk-group{width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;gap:3px;}
+  .wk-group-hit{
+    display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;
+    cursor:pointer;border-radius:4px 4px 0 0;flex:1;max-width:16px;
+  }
+  .wk-group-hit:focus-visible{outline:2px solid var(--maroon-light);outline-offset:2px;}
+  .wk-group-bar{width:100%;border-radius:4px 4px 0 0;transition:filter .1s;}
+  .wk-group-hit:hover .wk-group-bar,.wk-group-hit:focus-visible .wk-group-bar{filter:brightness(1.1);}
+  .wk-group-bar.wk-seg-null{min-height:8px;}
+
+  /* Line charts (Daily Frequency Downloads, IGNITE Her Radio Downloads) */
+  .wk-line-wrap{position:absolute;inset:0;}
+  .wk-line-hits{position:absolute;inset:0;display:flex;}
+  .wk-line-hit{flex:1;height:100%;cursor:pointer;}
+  .wk-line-hit:focus-visible{outline:2px solid var(--maroon-light);outline-offset:-2px;}
+  .view-data-btn{
+    margin-top:14px;background:none;border:none;padding:4px 0;font-family:inherit;font-size:13.5px;font-weight:700;
+    color:var(--maroon);cursor:pointer;display:inline-flex;align-items:center;gap:6px;
+  }
+  .view-data-btn:hover{color:var(--maroon-dark);}
+  .view-data-btn:hover .label-text{text-decoration:underline;}
+  .view-data-btn .arrow{font-size:10px;display:inline-block;transition:transform .15s;}
+  .view-data-btn.open .arrow{transform:rotate(180deg);}
+  .chart-table-wrap{margin-top:10px;overflow-x:auto;}
+  .chart-table{width:100%;border-collapse:collapse;font-size:14px;}
+  .chart-table th,.chart-table td{padding:7px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;}
+  .chart-table th:first-child,.chart-table td:first-child{text-align:left;}
+  .chart-table th{color:var(--ink-muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em;font-weight:700;}
+  .chart-table td{color:var(--ink);font-variant-numeric:tabular-nums;}
+  .chart-table tbody tr:last-child td{border-bottom:none;}
+  #chartTooltip{
+    position:fixed;left:0;top:0;pointer-events:none;z-index:80;background:var(--ink);color:#fff;border-radius:8px;
+    padding:9px 13px;font-size:13px;line-height:1.6;box-shadow:0 8px 20px rgba(0,0,0,.2);opacity:0;
+    transform:translate(-50%,calc(-100% - 14px));transition:opacity .08s;max-width:250px;
+  }
+  #chartTooltip.visible{opacity:1;}
+  #chartTooltip .tt-title{font-weight:700;margin-bottom:4px;font-size:12.5px;color:#fff;white-space:nowrap;}
+  #chartTooltip .tt-row{display:flex;justify-content:space-between;gap:16px;color:#e9e4dc;}
+  #chartTooltip .tt-row.tt-total{border-top:1px solid rgba(255,255,255,.22);margin-top:3px;padding-top:3px;}
+  #chartTooltip .tt-row .tt-val{font-weight:700;color:#fff;}
 </style>
 </head>
 <body>
@@ -279,6 +386,7 @@
 
   <footer class="meta">Source: 2026 CEO Dashboard workbook · weekly Mon–Sun cycle | Showing: <span id="footerRange"></span></footer>
 </div>
+<div id="chartTooltip" role="tooltip"></div>
 
 <script>
 const fmtInt = n => (n === null || n === undefined) ? '—' : Math.round(n).toLocaleString('en-US');
@@ -286,6 +394,458 @@ const fmt1 = n => (n === null || n === undefined) ? '—' : (Math.round(n*10)/10
 const fmtMoney = n => (n === null || n === undefined) ? '—' : '$' + n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
 const fmtPct = n => (n === null || n === undefined) ? '—' : (Math.round(n*1000)/10) + '%';
 const fmtPct1 = n => (n === null || n === undefined) ? '—' : (Math.round(n*10)/10) + '%';
+
+/* ---- Last 4 Weeks bar charts (Membership & Programs) ---- */
+const CHART_REGISTRY = {};
+let wkPinnedKey = null;
+
+function shortWeekLabel(label) {
+  // "Aug 10–16, 2026" -> "Aug 10–16"; "Aug 31 – Sep 6, 2026" -> "Aug 31 – Sep 6"
+  return label.replace(/,\s*\d{4}$/, '');
+}
+
+function weekStartLabel(label) {
+  // X-axis labels show just the week's start date: "Aug 10–16" -> "Aug 10";
+  // "Aug 31 – Sep 6" -> "Aug 31". Tooltips, tables, and aria-labels keep the
+  // full range (via shortWeekLabel) since the precision is useful there.
+  return shortWeekLabel(label).split(/\s*–\s*/)[0];
+}
+
+// Compact on-chart value label — full precision stays in the tooltip/table;
+// this is just what fits above a ~30px bar without wrapping. Money values
+// over $1,000 abbreviate to "$50.5k" so they never overflow the column.
+function fmtValCompact(n, valueFormat) {
+  if (n === null || n === undefined) return '—';
+  if (valueFormat === 'money') {
+    const abs = Math.abs(n);
+    if (abs >= 1000) return (n < 0 ? '-' : '') + '$' + (abs / 1000).toFixed(1) + 'k';
+    return '$' + Math.round(n).toLocaleString('en-US');
+  }
+  if (valueFormat === 'pct') return fmtPct(n);
+  return fmtInt(n);
+}
+
+// Computes evenly-spaced "nice" axis ticks from 0 up to a rounded max, so
+// gridlines land on clean round numbers (0, 200, 400, ... rather than 0,
+// 173.5, 347, ...) — matches the old dashboard's axis style.
+function niceTicks(maxVal, tickCount = 4) {
+  const safeMax = Math.max(maxVal, 1e-9);
+  const rawStep = safeMax / tickCount;
+  const mag = Math.pow(10, Math.floor(Math.log10(rawStep)));
+  const norm = rawStep / mag;
+  let step;
+  if (norm <= 1) step = 1 * mag;
+  else if (norm <= 2) step = 2 * mag;
+  else if (norm <= 5) step = 5 * mag;
+  else step = 10 * mag;
+  const niceMax = Math.ceil(safeMax / step) * step;
+  const ticks = [];
+  for (let v = 0; v <= niceMax + step / 1000; v += step) ticks.push(Math.round(v * 1000) / 1000);
+  return { max: niceMax, ticks };
+}
+
+// Shared y-axis (numeric ticks) + horizontal gridline wrapper used by every
+// chart shape (bar/stacked/grouped/line). `contentHtml` fills the plot area
+// edge-to-edge (it's expected to position:absolute inset:0 into .wk-plotarea).
+// No value is ever printed on the chart itself here — only axis ticks; exact
+// per-week values show in the hover/click tooltip and the View data table.
+function axisPlot({ ticks, niceMax, valueFormat, heightPx, contentHtml }) {
+  const numIntervals = Math.max(ticks.length - 1, 1);
+  const axisHtml = ticks.slice().reverse().map(t =>
+    `<div class="wk-ytick" style="bottom:${((t / niceMax) * 100).toFixed(3)}%">${fmtValCompact(t, valueFormat)}</div>`
+  ).join('');
+  return `
+    <div class="wk-plot" style="height:${heightPx}px;">
+      <div class="wk-yaxis">${axisHtml}</div>
+      <div class="wk-plotarea" style="--wk-grid-step:${(100 / numIntervals).toFixed(4)}%;">${contentHtml}</div>
+    </div>`;
+}
+
+// Renders the x-axis row (week-start dates) aligned under the plot area,
+// offset by the same width as the y-axis column so labels sit under their bars.
+function axisLabelsRow(weeks) {
+  const labels = weeks.map((w, i) =>
+    `<div class="wk-col-label${i === weeks.length - 1 ? ' is-latest' : ''}">${weekStartLabel(w.label)}</div>`
+  ).join('');
+  return `
+    <div class="wk-axis-row">
+      <div class="wk-yaxis-spacer"></div>
+      <div class="wk-axis-labels">${labels}</div>
+    </div>`;
+}
+
+// segments: [{key, label, color}] — one entry for a plain bar, two-or-more for a stacked bar.
+// weeks: [{label, total, <key>: value, ...}] — `total` is the full bar height (equal
+// to the single segment's own value when there's only one). A segment value (or the
+// whole week's `total`) may be null — that week is not tracked / not applicable — and
+// renders as a dashed "no data" mark rather than a fabricated zero-height bar.
+// valueFormat: 'int' (default) or 'money' — controls formatting everywhere for this chart.
+// valueCaption: small label under the top-right value (e.g. "4-week total"),
+// shown instead of the usual up/down change arrow when provided.
+function buildWeekChart({ id, title, sub, valueNum, valueChange, valueCaption, weeks, segments, bare, valueFormat, headMinHeight }) {
+  const fmtVal = valueFormat === 'money' ? fmtMoney : fmtInt;
+  CHART_REGISTRY[id] = { weeks, segments, fmtVal };
+  const knownTotals = weeks.map(w => w.total).filter(v => v !== null && v !== undefined);
+  const maxTotal = Math.max(...knownTotals, 1);
+  const { max: niceMax, ticks } = niceTicks(maxTotal);
+
+  const cols = weeks.map((w, i) => {
+    const segsHtml = segments.map(seg => {
+      const v = w[seg.key];
+      if (v === null || v === undefined) {
+        return `<div class="wk-seg wk-seg-null" style="height:6%" title="No data"></div>`;
+      }
+      const h = Math.max(0.5, (v / niceMax) * 100);
+      return `<div class="wk-seg" style="height:${h}%;background:${seg.color}"></div>`;
+    }).join('');
+    return `
+      <div class="wk-col">
+        <div class="wk-hit" tabindex="0" role="img" aria-label="${w.label}: ${fmtVal(w.total)}"
+             onmouseenter="wkShow(event,'${id}',${i})" onmousemove="wkMove(event)"
+             onmouseleave="wkHide()" onfocus="wkShow(event,'${id}',${i})" onblur="wkHide()"
+             onclick="wkPin(event,'${id}',${i})">
+          <div class="wk-bar-area">${segsHtml}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  const legend = segments.length > 1
+    ? `<div class="chart-legend">${segments.map(s => `<span class="chart-legend-item"><span class="chart-swatch" style="background:${s.color}"></span>${s.label}</span>`).join('')}</div>`
+    : '';
+
+  const theadCells = segments.length > 1
+    ? `<th>Week</th>${segments.map(s => `<th>${s.label}</th>`).join('')}<th>Total</th>`
+    : `<th>Week</th><th>Value</th>`;
+  const tbodyRows = weeks.map(w => {
+    if (segments.length > 1) {
+      return `<tr><td>${w.label}</td>${segments.map(s => `<td>${fmtVal(w[s.key])}</td>`).join('')}<td>${fmtVal(w.total)}</td></tr>`;
+    }
+    return `<tr><td>${w.label}</td><td>${fmtVal(w.total)}</td></tr>`;
+  }).join('');
+
+  const plot = axisPlot({ ticks, niceMax, valueFormat, heightPx: 140, contentHtml: `<div class="wk-chart">${cols}</div>` });
+
+  const plotBlock = `
+      ${plot}
+      ${axisLabelsRow(weeks)}
+      <button class="view-data-btn" id="${id}-btn" onclick="toggleChartTable('${id}')" aria-expanded="false">
+        <span class="arrow">▾</span><span class="label-text">View data</span>
+      </button>
+      <div class="chart-table-wrap" id="${id}-table-wrap" hidden>
+        <table class="chart-table"><thead><tr>${theadCells}</tr></thead><tbody>${tbodyRows}</tbody></table>
+      </div>`;
+
+  // `bare` skips the outer .card/.chart-head shell — used when the chart is
+  // being embedded inside a card that already renders its own header (e.g.
+  // Substack Soapbox, which shows a supporting KPI above the chart).
+  if (bare) return `${legend}${plotBlock}`;
+
+  const valueBlock = valueNum === undefined ? '' : `
+        <div class="chart-value">${fmtVal(valueNum)}${
+          valueCaption ? `<span class="val-caption">${valueCaption}</span>`
+          : (valueChange !== undefined ? changeSpan(valueChange) : '')
+        }</div>`;
+
+  // Title, subtitle, and legend live together in one left-hand column so
+  // they hug each other regardless of how tall the right-hand value block
+  // is — previously they sat in separate rows below the full chart-head,
+  // which left a visible gap whenever the value block (number + caption)
+  // was taller than the title alone.
+  const headStyle = headMinHeight ? ` style="min-height:${headMinHeight}px"` : '';
+  return `
+    <div class="card chart-card" id="card-${id}">
+      <div class="chart-head"${headStyle}>
+        <div class="chart-head-left">
+          <h3>${title}</h3>
+          <div class="chart-sub">${sub || ''}</div>
+          ${legend}
+        </div>
+        ${valueBlock}
+      </div>
+      ${plotBlock}
+    </div>`;
+}
+
+// Grouped (not stacked) bar chart — each week shows one independent, narrow
+// bar per category, side by side. Used where combining values would
+// misrepresent genuinely separate things (e.g. three distinct weekly
+// webinars) — segments: [{key, rateKey?, label, color}]. A null segment
+// value renders a "no data" hatch mark instead of a fabricated zero bar.
+function buildGroupedChart({ id, title, sub, weeks, segments, valueFormat }) {
+  const fmtVal = valueFormat === 'money' ? fmtMoney : valueFormat === 'pct' ? fmtPct : fmtInt;
+  CHART_REGISTRY[id] = { weeks, segments, fmtVal, grouped: true };
+  const allVals = [];
+  weeks.forEach(w => segments.forEach(seg => {
+    const v = w[seg.key];
+    if (v !== null && v !== undefined) allVals.push(v);
+  }));
+  const maxVal = Math.max(...allVals, 1);
+  const { max: niceMax, ticks } = niceTicks(maxVal);
+
+  const cols = weeks.map((w, i) => {
+    const bars = segments.map((seg, si) => {
+      const v = w[seg.key];
+      const isNull = (v === null || v === undefined);
+      const h = isNull ? 6 : Math.max(0.5, (v / niceMax) * 100);
+      const ariaVal = isNull ? 'No data' : fmtVal(v);
+      return `
+          <div class="wk-group-hit" tabindex="0" role="img" aria-label="${w.label}: ${seg.label}: ${ariaVal}"
+               onmouseenter="wkShow(event,'${id}',${i},${si})" onmousemove="wkMove(event)"
+               onmouseleave="wkHide()" onfocus="wkShow(event,'${id}',${i},${si})" onblur="wkHide()"
+               onclick="wkPin(event,'${id}',${i},${si})">
+            <div class="wk-group-bar${isNull ? ' wk-seg-null' : ''}" style="height:${h}%;${isNull ? '' : `background:${seg.color}`}"></div>
+          </div>`;
+    }).join('');
+    return `
+      <div class="wk-col">
+        <div class="wk-group">${bars}</div>
+      </div>`;
+  }).join('');
+
+  const legend = `<div class="chart-legend">${segments.map(s => `<span class="chart-legend-item"><span class="chart-swatch" style="background:${s.color}"></span>${s.label}</span>`).join('')}</div>`;
+  const theadCells = `<th>Week</th>${segments.map(s => `<th>${s.label}</th>`).join('')}`;
+  const tbodyRows = weeks.map(w =>
+    `<tr><td>${w.label}</td>${segments.map(s => `<td>${fmtVal(w[s.key])}</td>`).join('')}</tr>`
+  ).join('');
+
+  const plot = axisPlot({ ticks, niceMax, valueFormat, heightPx: 140, contentHtml: `<div class="wk-chart">${cols}</div>` });
+
+  return `
+    <div class="card chart-card" id="card-${id}">
+      <div class="chart-head">
+        <h3>${title}</h3>
+      </div>
+      <div class="chart-sub">${sub || ''}</div>
+      ${legend}
+      ${plot}
+      ${axisLabelsRow(weeks)}
+      <button class="view-data-btn" id="${id}-btn" onclick="toggleChartTable('${id}')" aria-expanded="false">
+        <span class="arrow">▾</span><span class="label-text">View data</span>
+      </button>
+      <div class="chart-table-wrap" id="${id}-table-wrap" hidden>
+        <table class="chart-table"><thead><tr>${theadCells}</tr></thead><tbody>${tbodyRows}</tbody></table>
+      </div>
+    </div>`;
+}
+
+// Line chart with data-point markers — used where series must never be summed
+// or stacked (each is its own independent metric). series: [{key, label,
+// color}], 1 or 2 entries. Hovering anywhere in a week's column shows every
+// series' value for that week (never a combined total).
+function buildLineChart({ id, title, sub, weeks, series, valueFormat, valueNum, valueCaption, bare, headMinHeight }) {
+  const fmtVal = valueFormat === 'money' ? fmtMoney : fmtInt;
+  CHART_REGISTRY[id] = { weeks, segments: series, fmtVal, noTotal: true };
+  const W = 400, H = 140; // internal SVG coordinate space; scales via viewBox
+  const n = weeks.length;
+  const xAt = i => n > 1 ? (i / (n - 1)) * W : W / 2;
+  const allVals = [];
+  weeks.forEach(w => series.forEach(s => {
+    const v = w[s.key];
+    if (v !== null && v !== undefined) allVals.push(v);
+  }));
+  const maxVal = Math.max(...allVals, 1);
+  const { max: niceMax, ticks } = niceTicks(maxVal);
+  const yAt = v => H - (v / niceMax) * H;
+
+  const paths = series.map(s => {
+    const pts = weeks.map((w, i) => ({ i, v: w[s.key] }));
+    // Draw separate polyline segments across consecutive known points only —
+    // never bridges over a null/N/A week with a fabricated interpolation.
+    let segs = [];
+    let cur = [];
+    pts.forEach(p => {
+      if (p.v === null || p.v === undefined) {
+        if (cur.length) segs.push(cur);
+        cur = [];
+      } else {
+        cur.push(p);
+      }
+    });
+    if (cur.length) segs.push(cur);
+    const lines = segs.filter(seg => seg.length > 1).map(seg =>
+      `<polyline points="${seg.map(p => `${xAt(p.i)},${yAt(p.v)}`).join(' ')}" fill="none" stroke="${s.color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`
+    ).join('');
+    const dots = pts.filter(p => p.v !== null && p.v !== undefined).map(p =>
+      `<circle cx="${xAt(p.i)}" cy="${yAt(p.v)}" r="4" fill="${s.color}"/>`
+    ).join('');
+    // N/A weeks get a dashed open-circle "no data" mark rather than a fabricated
+    // point, matching the hatch-pattern convention used on the bar charts.
+    const nullMarks = pts.filter(p => p.v === null || p.v === undefined).map(p =>
+      `<circle cx="${xAt(p.i)}" cy="${H / 2}" r="5" fill="none" stroke="${s.color}" stroke-width="1.5" stroke-dasharray="3,2" opacity=".55"/>`
+    ).join('');
+    return lines + dots + nullMarks;
+  }).join('');
+
+  const hits = weeks.map((w, i) =>
+    `<div class="wk-line-hit" tabindex="0" role="img" aria-label="${w.label}"
+          onmouseenter="wkShow(event,'${id}',${i})" onmousemove="wkMove(event)"
+          onmouseleave="wkHide()" onfocus="wkShow(event,'${id}',${i})" onblur="wkHide()"
+          onclick="wkPin(event,'${id}',${i})"></div>`
+  ).join('');
+
+  const legend = series.length > 1
+    ? `<div class="chart-legend">${series.map(s => `<span class="chart-legend-item"><span class="chart-swatch is-line" style="background:${s.color}"></span>${s.label}</span>`).join('')}</div>`
+    : '';
+
+  const theadCells = `<th>Week</th>${series.map(s => `<th>${s.label}</th>`).join('')}`;
+  const tbodyRows = weeks.map(w =>
+    `<tr><td>${w.label}</td>${series.map(s => `<td>${fmtVal(w[s.key])}</td>`).join('')}</tr>`
+  ).join('');
+
+  const lineContent = `
+      <div class="wk-line-wrap">
+        <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;display:block;overflow:visible;">${paths}</svg>
+        <div class="wk-line-hits">${hits}</div>
+      </div>`;
+  const plot = axisPlot({ ticks, niceMax, valueFormat, heightPx: H, contentHtml: lineContent });
+
+  const plotBlock = `
+      ${plot}
+      ${axisLabelsRow(weeks)}
+      <button class="view-data-btn" id="${id}-btn" onclick="toggleChartTable('${id}')" aria-expanded="false">
+        <span class="arrow">▾</span><span class="label-text">View data</span>
+      </button>
+      <div class="chart-table-wrap" id="${id}-table-wrap" hidden>
+        <table class="chart-table"><thead><tr>${theadCells}</tr></thead><tbody>${tbodyRows}</tbody></table>
+      </div>`;
+
+  // `bare` skips the outer .card/.chart-head shell — used when the chart is
+  // embedded inside a card that already renders its own header/stat rows
+  // (Daily Frequency Downloads: separate Kajabi/Substack averages above).
+  if (bare) return `${legend}${plotBlock}`;
+
+  const valueBlock = valueNum === undefined ? '' : `
+        <div class="chart-value">${fmtVal(valueNum)}${valueCaption ? `<span class="val-caption">${valueCaption}</span>` : ''}</div>`;
+
+  const headStyle = headMinHeight ? ` style="min-height:${headMinHeight}px"` : '';
+  return `
+    <div class="card chart-card" id="card-${id}">
+      <div class="chart-head"${headStyle}>
+        <div class="chart-head-left">
+          <h3>${title}</h3>
+          <div class="chart-sub">${sub || ''}</div>
+          ${legend}
+        </div>
+        ${valueBlock}
+      </div>
+      ${plotBlock}
+    </div>`;
+}
+
+function toggleChartTable(id) {
+  const wrap = document.getElementById(id + '-table-wrap');
+  const btn = document.getElementById(id + '-btn');
+  if (!wrap || !btn) return;
+  const willShow = wrap.hidden;
+  wrap.hidden = !willShow;
+  btn.classList.toggle('open', willShow);
+  btn.setAttribute('aria-expanded', String(willShow));
+}
+
+// segIdx (grouped-bar charts only): show just that one category's own value
+// (+ attendance rate, when the segment tracks one) — never combined with the
+// other bars in the same week, since grouped categories are separate metrics.
+function wkTooltipNode(id, idx, segIdx) {
+  const entry = CHART_REGISTRY[id];
+  const w = entry.weeks[idx];
+  const segments = entry.segments;
+  const fmtVal = entry.fmtVal || fmtInt;
+  const frag = document.createElement('div');
+  const titleEl = document.createElement('div');
+  titleEl.className = 'tt-title';
+  titleEl.textContent = w.label;
+  frag.appendChild(titleEl);
+
+  const addRowRaw = (label, formatted, isTotal) => {
+    const row = document.createElement('div');
+    row.className = 'tt-row' + (isTotal ? ' tt-total' : '');
+    const nameEl = document.createElement('span');
+    nameEl.textContent = label;
+    const valEl = document.createElement('span');
+    valEl.className = 'tt-val';
+    valEl.textContent = formatted;
+    row.appendChild(nameEl);
+    row.appendChild(valEl);
+    frag.appendChild(row);
+  };
+  const addRow = (label, value, isTotal) => addRowRaw(label, fmtVal(value), isTotal);
+
+  if (segIdx !== undefined) {
+    const seg = segments[segIdx];
+    const v = w[seg.key];
+    addRow(seg.label, v, false);
+    if (seg.rateKey) {
+      const rate = w[seg.rateKey];
+      const rateFmt = seg.rateFmt || fmtPct1;
+      addRowRaw(seg.rateLabel || 'Attendance Rate', (rate === null || rate === undefined) ? '—' : rateFmt(rate), false);
+    }
+    return frag;
+  }
+
+  if (entry.grouped) {
+    // Whole-column fallback — every hoverable target in a grouped chart is
+    // per-bar (segIdx set), so this path shouldn't normally fire.
+    segments.forEach(seg => addRow(seg.label, w[seg.key], false));
+    return frag;
+  }
+
+  if (segments.length > 1) {
+    segments.forEach(seg => addRow(seg.tooltipLabel || seg.label, w[seg.key], false));
+    if (!entry.noTotal) addRow('Total', w.total, true);
+  } else {
+    addRow('Value', w.total, false);
+  }
+  return frag;
+}
+
+function wkPosition(evt) {
+  const tt = document.getElementById('chartTooltip');
+  tt.style.left = evt.clientX + 'px';
+  tt.style.top = evt.clientY + 'px';
+}
+
+function wkShow(evt, id, idx, segIdx) {
+  if (wkPinnedKey) return;
+  const tt = document.getElementById('chartTooltip');
+  tt.innerHTML = '';
+  tt.appendChild(wkTooltipNode(id, idx, segIdx));
+  tt.classList.add('visible');
+  wkPosition(evt);
+}
+
+function wkMove(evt) {
+  if (wkPinnedKey) return;
+  if (document.getElementById('chartTooltip').classList.contains('visible')) wkPosition(evt);
+}
+
+function wkHide() {
+  if (wkPinnedKey) return;
+  document.getElementById('chartTooltip').classList.remove('visible');
+}
+
+function wkPin(evt, id, idx, segIdx) {
+  evt.stopPropagation();
+  const tt = document.getElementById('chartTooltip');
+  const key = id + ':' + idx + (segIdx !== undefined ? ':' + segIdx : '');
+  if (wkPinnedKey === key) {
+    wkPinnedKey = null;
+    tt.classList.remove('visible');
+    return;
+  }
+  wkPinnedKey = key;
+  tt.innerHTML = '';
+  tt.appendChild(wkTooltipNode(id, idx, segIdx));
+  tt.classList.add('visible');
+  wkPosition(evt);
+}
+
+function wkResetTooltip() {
+  wkPinnedKey = null;
+  const tt = document.getElementById('chartTooltip');
+  if (tt) tt.classList.remove('visible');
+}
+
+document.addEventListener('click', () => { if (wkPinnedKey) wkResetTooltip(); });
 
 function changeSpan(delta) {
   if (delta === null || delta === undefined) return '<span class="chg flat">—</span>';
@@ -365,7 +925,7 @@ function heroHTML(period) {
         </div>
         <div class="comp">
           <div class="k">IGNITE Programs</div>
-          <div class="ksub">LAB · Launchpad · Design Hub · Incubator</div>
+          <div class="ksub ksub-tight">LAB · Launchpad · Design Hub · Incubator</div>
           <div class="v">${fmtInt(d.programs.value)}</div>
           ${heroChange(d.programs.change, 'c', suffix)}
         </div>
@@ -380,22 +940,22 @@ function heroHTML(period) {
       <h3>Weekly Pulse${period.is_trend ? ' — 4-Week Trend' : ''}</h3>
       <div class="pulse-grid">
         <div class="pulse-item">
-          <div class="pk">Net Client Change${period.is_trend ? ' (4 Wks)' : ''}</div>
+          <div class="pk">Net Client Change</div>
           <div class="pv">${d.total_clients.change > 0 ? '+' : ''}${fmtInt(d.total_clients.change)}</div>
           <div class="pc">${changeSpan(d.total_clients.change)}</div>
         </div>
         <div class="pulse-item">
-          <div class="pk">Daily Frequency Downloads (Avg/Episode)</div>
+          <div class="pk">DF Downloads (Avg/Episode)</div>
           <div class="prow"><span class="plabel">Kajabi</span><span class="pval">${fmt1(d.daily_frequency.kajabi_avg)}</span>${arrowVal(d.daily_frequency.kajabi_change)}</div>
           <div class="prow"><span class="plabel">Substack</span><span class="pval">${fmt1(d.daily_frequency.substack_avg)}</span>${arrowVal(d.daily_frequency.substack_change)}</div>
         </div>
         <div class="pulse-item">
-          <div class="pk">Action Tracker Submissions${period.is_trend ? ' (4-Wk Total)' : ''}</div>
+          <div class="pk">Action Tracker Submissions</div>
           <div class="pv">${fmtInt(d.action_tracker.value)}</div>
           <div class="pc">${changeSpan(d.action_tracker.change)}</div>
         </div>
         <div class="pulse-item">
-          <div class="pk">Called to Lead — New${period.is_trend ? ' (4 Wks)' : ' This Week'}</div>
+          <div class="pk">Called to Lead — New${period.is_trend ? '' : ' This Week'}</div>
           <div class="pv">${fmtInt(d.called_to_lead.new)}</div>
           <div class="pc">${fmtInt(d.called_to_lead.total)} / ${d.called_to_lead.goal} total (${fmtPct1(d.called_to_lead.progress_pct)} of goal)</div>
         </div>
@@ -408,6 +968,94 @@ function renderMembership(period) {
   const d = period.data;
   const isTrend = period.is_trend;
   const revokedLabel = isTrend ? 'Members access revoked (4-wk total)' : 'Members access revoked this week';
+
+  if (isTrend) {
+    const ws = d.weekly_series;
+    // Programs has a 1-line subtitle and Red Rebelle Room has a 1-line legend,
+    // but University has neither — pin all three headers to the same height
+    // so the charts/x-axis/View data line up across the row.
+    const MEM_ROW1_HEAD_H = 66;
+    const programsChart = buildWeekChart({
+      id: 'programs',
+      title: 'IGNITE Other Programs',
+      sub: 'LAB · Launchpad · Design Hub · Incubator',
+      valueNum: d.programs.value,
+      valueChange: d.programs.change,
+      headMinHeight: MEM_ROW1_HEAD_H,
+      weeks: ws.map(w => ({ label: w.label, total: w.programs, programs: w.programs })),
+      segments: [{ key: 'programs', label: 'Programs', color: 'var(--maroon)' }],
+    });
+    const universityChart = buildWeekChart({
+      id: 'university',
+      title: 'IGNITE Her University',
+      valueNum: d.university.value,
+      valueChange: d.university.change,
+      headMinHeight: MEM_ROW1_HEAD_H,
+      weeks: ws.map(w => ({ label: w.label, total: w.university, university: w.university })),
+      segments: [{ key: 'university', label: 'University', color: 'var(--maroon)' }],
+    });
+    const redRebelleChart = buildWeekChart({
+      id: 'redrebelle',
+      title: 'Red Rebelle Room',
+      valueNum: d.red_rebelle.value,
+      valueChange: d.red_rebelle.change,
+      headMinHeight: MEM_ROW1_HEAD_H,
+      weeks: ws.map(w => ({
+        label: w.label,
+        total: w.red_rebelle_total,
+        room: w.red_rebelle_room,
+        drop: w.red_rebelle_drop,
+      })),
+      segments: [
+        { key: 'room', label: 'Red Rebelle Room', color: 'var(--maroon)' },
+        { key: 'drop', label: 'Red Rebelle Drop', color: 'var(--gold)' },
+      ],
+    });
+    const soapboxChartInner = buildWeekChart({
+      id: 'soapbox',
+      bare: true,
+      weeks: ws.map(w => ({
+        label: w.label,
+        total: w.soapbox_total,
+        yearly: w.soapbox_yearly,
+        monthly: w.soapbox_monthly,
+      })),
+      segments: [
+        { key: 'yearly', label: 'Yearly', color: 'var(--maroon)' },
+        { key: 'monthly', label: 'Monthly', color: 'var(--gold)' },
+      ],
+    });
+
+    return `
+      <div class="grid three">${programsChart}${universityChart}${redRebelleChart}</div>
+
+      <div class="section-title">Soapbox · Upsells &amp; Upgrades · Renewals</div>
+      <div class="grid three">
+        <div class="card chart-card">
+          <div class="chart-head">
+            <div class="chart-head-left">
+              <h3>Substack Soapbox</h3>
+              <div class="chart-kpi-line">New Subscribers<strong>${fmtInt(d.soapbox.new)}</strong></div>
+            </div>
+            <div class="chart-value">${fmtInt(d.soapbox.total)}${changeSpan(d.soapbox.total_change)}</div>
+          </div>
+          ${soapboxChartInner}
+        </div>
+        <div class="card">
+          <h3>Upsells &amp; Upgrades <span class="badge">4-wk total</span></h3>
+          <div class="row"><span class="rlabel">IGNITE Her U</span><span class="rval">${fmtInt(d.upsells.ignite_her_u.value)} ${changeLabel(d.upsells.ignite_her_u.change)}</span></div>
+          <div class="row"><span class="rlabel">1:1 Power Hours</span><span class="rval">${fmtInt(d.upsells.power_hour.value)}</span></div>
+        </div>
+        <div class="card">
+          <h3>Renewals <span class="badge">4-wk total</span></h3>
+          <div class="row"><span class="rlabel">Renewed</span><span class="rval">${fmtInt(d.renewals.renewed)}</span></div>
+          <div class="row"><span class="rlabel">Not Renewing</span><span class="rval">${fmtInt(d.renewals.not_renewing)}</span></div>
+          <div class="row"><span class="rlabel">No Response</span><span class="rval">${fmtInt(d.renewals.no_response)}</span></div>
+        </div>
+      </div>
+    `;
+  }
+
   return `
     <div class="grid">
       <div class="card">
@@ -431,24 +1079,50 @@ function renderMembership(period) {
     <div class="grid three">
       <div class="card">
         <h3>Substack Soapbox <span class="badge">${fmtInt(d.soapbox.total)} total</span></h3>
-        <div class="row"><span class="rlabel">New${isTrend ? ' (4-wk total)' : ''}</span><span class="rval">${fmtInt(d.soapbox.new)}</span></div>
+        <div class="row"><span class="rlabel">New</span><span class="rval">${fmtInt(d.soapbox.new)}</span></div>
         <div class="row"><span class="rlabel">Monthly</span><span class="rval">${fmtInt(d.soapbox.monthly)}</span></div>
         <div class="row"><span class="rlabel">Yearly</span><span class="rval">${fmtInt(d.soapbox.yearly)}</span></div>
         <div class="row"><span class="rlabel">Total</span><span class="rval">${fmtInt(d.soapbox.total)}</span></div>
       </div>
       <div class="card">
-        <h3>Upsells &amp; Upgrades${isTrend ? ' <span class="badge">4-wk total</span>' : ''}</h3>
+        <h3>Upsells &amp; Upgrades</h3>
         <div class="row"><span class="rlabel">IGNITE Her U</span><span class="rval">${fmtInt(d.upsells.ignite_her_u.value)} ${changeLabel(d.upsells.ignite_her_u.change)}</span></div>
         <div class="row"><span class="rlabel">1:1 Power Hours</span><span class="rval">${fmtInt(d.upsells.power_hour.value)}</span></div>
       </div>
       <div class="card">
-        <h3>Renewals${isTrend ? ' <span class="badge">4-wk total</span>' : ''}</h3>
+        <h3>Renewals</h3>
         <div class="row"><span class="rlabel">Renewed</span><span class="rval">${fmtInt(d.renewals.renewed)}</span></div>
         <div class="row"><span class="rlabel">Not Renewing</span><span class="rval">${fmtInt(d.renewals.not_renewing)}</span></div>
         <div class="row"><span class="rlabel">No Response</span><span class="rval">${fmtInt(d.renewals.no_response)}</span></div>
       </div>
     </div>
   `;
+}
+
+// (Weekly Pulse labels dropped their redundant "(4 Wks)"/"(4-Wk Total)" suffixes
+// in the trend view — the box header already says "— 4-Week Trend" — and
+// "Daily Frequency" shortened to "DF" there, per Gen's round 19 feedback.)
+
+// Compact Open/Click table for TGIM Email Engagement — replaces a repeated
+// label/Open/Click block per segment (which restates "Open"/"Click" three
+// times) with a single small table, matching the .chart-table style used
+// elsewhere for "View data" tables.
+function tgimTable(d) {
+  const rows = [
+    ['University', d.tgim.university_open, d.tgim.university_click],
+    ['Other Programs', d.tgim.other_open, d.tgim.other_click],
+    ['Soapbox', d.tgim.soapbox_open, d.tgim.soapbox_click],
+  ];
+  const trs = rows.map(([label, open, click]) =>
+    `<tr><td>${label}</td><td>${fmtPct(open)}</td><td>${fmtPct(click)}</td></tr>`
+  ).join('');
+  return `
+    <div class="chart-table-wrap" style="margin-top:2px;">
+      <table class="chart-table">
+        <thead><tr><th>Segment</th><th>Open</th><th>Click</th></tr></thead>
+        <tbody>${trs}</tbody>
+      </table>
+    </div>`;
 }
 
 function renderEngagement(period) {
@@ -462,12 +1136,129 @@ function renderEngagement(period) {
   if (period.data_notes && period.data_notes.engagement) {
     notesBlock = `<div class="data-notes"><strong>Data Notes</strong>${period.data_notes.engagement}</div>`;
   }
+
+  if (isTrend) {
+    const ws = d.weekly_series;
+    // Kajabi and Substack are separate channels and must never be summed —
+    // a 2-series line chart (not a stacked bar) so neither reads as "part of"
+    // a combined total. The two 4-week averages are shown as their own rows
+    // above the chart instead of a single combined headline number.
+    const dailyFreqLine = buildLineChart({
+      id: 'dailyfreq',
+      bare: true,
+      weeks: ws.map(w => ({ label: w.label, kajabi_avg: w.kajabi_avg, substack_avg: w.substack_avg })),
+      series: [
+        { key: 'kajabi_avg', label: 'Kajabi', color: 'var(--maroon)' },
+        { key: 'substack_avg', label: 'Substack', color: 'var(--gold)' },
+      ],
+    });
+    // Row 1's three cards have differently-shaped headers (Daily Frequency has
+    // two supporting rows under its title; Radio/Action Tracker have a 2-line
+    // top-right value+caption instead) — pin all three to the same header
+    // height so the charts/x-axis/View data line up across the row.
+    const ROW1_HEAD_H = 74;
+    const radioChart = buildLineChart({
+      id: 'radio',
+      title: 'IGNITE Her Radio Downloads',
+      valueNum: d.radio.value,
+      valueCaption: '4-week avg',
+      headMinHeight: ROW1_HEAD_H,
+      weeks: ws.map(w => ({ label: w.label, radio: w.radio })),
+      series: [{ key: 'radio', label: 'Radio', color: 'var(--maroon)' }],
+    });
+    const actionTrackerChart = buildWeekChart({
+      id: 'actiontracker',
+      title: 'Action Tracker Submissions',
+      valueNum: d.action_tracker.value,
+      valueCaption: '4-week total',
+      headMinHeight: ROW1_HEAD_H,
+      weeks: ws.map(w => ({ label: w.label, total: w.action_tracker, action_tracker: w.action_tracker })),
+      segments: [{ key: 'action_tracker', label: 'Submissions', color: 'var(--maroon)' }],
+    });
+    // Aug 31–Sep 6 held no live webinars — all 3 categories are N/A that week
+    // (never shown as 0), called out directly under the chart title.
+    const webinarNA = ws.length > 0 && ['webinar_tue', 'webinar_wed', 'webinar_thu']
+      .every(k => ws[ws.length - 1][k] === null || ws[ws.length - 1][k] === undefined);
+    const webinarChart = buildGroupedChart({
+      id: 'webinaruv',
+      title: 'Webinar Unique Viewers',
+      sub: webinarNA ? 'Implementation Week — no live webinars.' : '',
+      weeks: ws.map(w => ({
+        label: w.label,
+        webinar_tue: w.webinar_tue, webinar_tue_rate: w.webinar_tue_rate,
+        webinar_wed: w.webinar_wed, webinar_wed_rate: w.webinar_wed_rate,
+        webinar_thu: w.webinar_thu, webinar_thu_rate: w.webinar_thu_rate,
+      })),
+      segments: [
+        { key: 'webinar_tue', rateKey: 'webinar_tue_rate', label: 'Business Support', color: 'var(--maroon)' },
+        { key: 'webinar_wed', rateKey: 'webinar_wed_rate', label: 'Substack School', color: 'var(--gold)' },
+        { key: 'webinar_thu', rateKey: 'webinar_thu_rate', label: 'Frequencies', color: 'var(--ink-secondary)' },
+      ],
+    });
+    // Certifications and TGIM now get their own bar charts too (per Gen's
+    // round 22 ask), matching the Action Tracker / Webinar pattern.
+    const certsChart = buildWeekChart({
+      id: 'certs',
+      title: 'Ignite Her Frequency Guide Certifications',
+      valueNum: d.coach_school_certifications,
+      valueCaption: '4-week total',
+      weeks: ws.map(w => ({ label: w.label, total: w.certifications, certifications: w.certifications })),
+      segments: [{ key: 'certifications', label: 'Completed', color: 'var(--maroon)' }],
+    });
+    // TGIM has 6 numbers (3 audiences × Open/Click) — too many to stack or
+    // group as 6 bars. Chart Open rate (the headline metric) as 3 grouped
+    // bars; each bar's tooltip also surfaces that audience's Click Rate,
+    // reusing the same rateKey mechanism the Webinar chart uses for
+    // Attendance Rate — so the exact Click numbers are still one hover away,
+    // just not plotted on their own tiny-scale axis next to Open rates.
+    const tgimChart = buildGroupedChart({
+      id: 'tgimopen',
+      title: 'TGIM Email Engagement',
+      sub: 'Open rate by segment',
+      valueFormat: 'pct',
+      weeks: ws.map(w => ({
+        label: w.label,
+        tgim_university_open: w.tgim_university_open, tgim_university_click: w.tgim_university_click,
+        tgim_other_open: w.tgim_other_open, tgim_other_click: w.tgim_other_click,
+        tgim_soapbox_open: w.tgim_soapbox_open, tgim_soapbox_click: w.tgim_soapbox_click,
+      })),
+      segments: [
+        { key: 'tgim_university_open', rateKey: 'tgim_university_click', rateLabel: 'Click Rate', rateFmt: fmtPct, label: 'University', color: 'var(--maroon)' },
+        { key: 'tgim_other_open', rateKey: 'tgim_other_click', rateLabel: 'Click Rate', rateFmt: fmtPct, label: 'Other Programs', color: 'var(--gold)' },
+        { key: 'tgim_soapbox_open', rateKey: 'tgim_soapbox_click', rateLabel: 'Click Rate', rateFmt: fmtPct, label: 'Soapbox', color: 'var(--ink-secondary)' },
+      ],
+    });
+
+    return `
+      ${notesBlock}
+      <div class="grid three">
+        <div class="card chart-card" id="card-dailyfreq">
+          <div class="chart-head" style="min-height:${ROW1_HEAD_H}px">
+            <div class="chart-head-left">
+              <h3>Daily Frequency Downloads</h3>
+              <div class="row row-tight"><span class="rlabel">Kajabi — 4-week Avg Downloads</span><span class="rval">${fmt1(d.daily_frequency.kajabi_avg)}</span></div>
+              <div class="row row-tight"><span class="rlabel">Substack — 4-week Avg Downloads</span><span class="rval">${fmt1(d.daily_frequency.substack_avg)}</span></div>
+            </div>
+          </div>
+          ${dailyFreqLine}
+        </div>
+        ${radioChart}
+        ${actionTrackerChart}
+      </div>
+      <div class="grid three">
+        ${certsChart}
+        ${webinarChart}
+        ${tgimChart}
+      </div>
+    `;
+  }
+
   return `
     ${notesBlock}
     <div class="grid">
       <div class="df-col">
         <div class="card">
-          <h3>Daily Frequency Downloads${isTrend ? ' <span class="badge">4-wk avg</span>' : ''}</h3>
+          <h3>Daily Frequency Downloads</h3>
           <div class="row row-emph"><span class="rlabel">Kajabi Avg</span><span class="rval">${fmt1(d.daily_frequency.kajabi_avg)} ${changeSpan(d.daily_frequency.kajabi_change)}</span></div>
           <div class="row row-emph"><span class="rlabel">Substack Avg</span><span class="rval">${fmt1(d.daily_frequency.substack_avg)} ${changeSpan(d.daily_frequency.substack_change)}</span></div>
         </div>
@@ -493,21 +1284,7 @@ function renderEngagement(period) {
       </div>
       <div class="card">
         <h3>TGIM Email Engagement</h3>
-        <div class="tgim-block">
-          <div class="tgim-label">University</div>
-          <div class="row"><span class="rlabel">Open</span><span class="rval">${fmtPct(d.tgim.university_open)}</span></div>
-          <div class="row"><span class="rlabel">Click</span><span class="rval">${fmtPct(d.tgim.university_click)}</span></div>
-        </div>
-        <div class="tgim-block">
-          <div class="tgim-label">LAB/Launchpad/Incub/Room</div>
-          <div class="row"><span class="rlabel">Open</span><span class="rval">${fmtPct(d.tgim.other_open)}</span></div>
-          <div class="row"><span class="rlabel">Click</span><span class="rval">${fmtPct(d.tgim.other_click)}</span></div>
-        </div>
-        <div class="tgim-block">
-          <div class="tgim-label">Soapbox</div>
-          <div class="row"><span class="rlabel">Open</span><span class="rval">${fmtPct(d.tgim.soapbox_open)}</span></div>
-          <div class="row"><span class="rlabel">Click</span><span class="rval">${fmtPct(d.tgim.soapbox_click)}</span></div>
-        </div>
+        ${tgimTable(d)}
       </div>
     </div>
   `;
@@ -525,24 +1302,102 @@ function renderRevenue(period) {
     const notesText = `Merch shop sales ${dir} vs last week: Total Sales ${fmtMoney(m.total_sales)} (${fmtPct1(m.total_sales_pct_change)}), Gross ${fmtMoney(m.gross)} (${fmtPct1(m.gross_pct_change)}), and Orders ${fmtInt(m.orders)} vs ${fmtInt(priorOrders)} last week.`;
     notesBlock = `<div class="data-notes"><strong>Data Notes</strong>${notesText}</div>`;
   }
+  if (isTrend) {
+    const ws = d.weekly_series;
+    const kajabiChart = buildWeekChart({
+      id: 'kajabirev',
+      title: 'Kajabi Revenue',
+      valueNum: s.kajabi.total_gross,
+      valueFormat: 'money',
+      valueCaption: '4-week total',
+      weeks: ws.map(w => ({
+        label: w.label, total: w.rev_kajabi_total,
+        rev_kajabi_university: w.rev_kajabi_university,
+        rev_kajabi_incubator: w.rev_kajabi_incubator,
+        rev_kajabi_powerhour: w.rev_kajabi_powerhour,
+      })),
+      segments: [
+        { key: 'rev_kajabi_university', label: 'IGNITE Her University', color: 'var(--maroon)' },
+        { key: 'rev_kajabi_incubator', label: 'Quantum Leap Incubator', color: 'var(--gold)' },
+        { key: 'rev_kajabi_powerhour', label: 'Power Hour', color: 'var(--ink-secondary)' },
+      ],
+    });
+    const substackChart = buildWeekChart({
+      id: 'substackrev',
+      title: 'Substack Revenue',
+      valueNum: s.substack.total,
+      valueFormat: 'money',
+      valueCaption: '4-week total',
+      weeks: ws.map(w => ({ label: w.label, total: w.rev_substack_total, rev_substack_rr: w.rev_substack_rr, rev_substack_soapbox: w.rev_substack_soapbox })),
+      segments: [
+        { key: 'rev_substack_rr', label: 'Red Rebelle Room', color: 'var(--maroon)' },
+        { key: 'rev_substack_soapbox', label: 'Soapbox', color: 'var(--gold)' },
+      ],
+    });
+    const merchChartInner = buildWeekChart({
+      id: 'merchsales',
+      bare: true,
+      valueFormat: 'money',
+      weeks: ws.map(w => ({ label: w.label, total: w.rev_merch_total_sales, rev_merch_total_sales: w.rev_merch_total_sales })),
+      segments: [{ key: 'rev_merch_total_sales', label: 'Total Sales', color: 'var(--maroon)' }],
+    });
+    const ctlChartInner = buildWeekChart({
+      id: 'ctlnew',
+      bare: true,
+      weeks: ws.map(w => ({ label: w.label, total: w.rev_called_to_lead_new, rev_called_to_lead_new: w.rev_called_to_lead_new })),
+      segments: [{ key: 'rev_called_to_lead_new', label: 'New Tickets', color: 'var(--maroon)' }],
+    });
+
+    return `
+      ${notesBlock}
+      <div class="grid two">${kajabiChart}${substackChart}</div>
+      <div class="grid two">
+        <div class="card chart-card" id="card-merchsales">
+          <div class="chart-head">
+            <div class="chart-head-left">
+              <h3>Merch Shop Sales</h3>
+              <div class="chart-sub">Total Sales · Shopify</div>
+            </div>
+            <div class="chart-value">${fmtMoney(m.net)}<span class="val-caption">4-week total Net Sales</span></div>
+          </div>
+          ${merchChartInner}
+        </div>
+        <div class="card chart-card" id="card-ctlnew">
+          <div class="chart-head">
+            <div class="chart-head-left">
+              <h3>Called to Lead Tickets</h3>
+              <div class="chart-sub">New tickets · Event</div>
+            </div>
+            <div class="chart-value">${fmtInt(d.called_to_lead.new)}<span class="val-caption">4-week total</span></div>
+          </div>
+          ${ctlChartInner}
+          <div class="row" style="margin-top:12px;"><span class="rlabel">Total sold</span><span class="rval">${fmtInt(d.called_to_lead.total)} ${changeSpan(d.called_to_lead.total_change)}</span></div>
+          <div class="row"><span class="rlabel">Goal</span><span class="rval">${d.called_to_lead.goal}</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:${Math.min(100, d.called_to_lead.progress_pct)}%"></div></div>
+          <div class="goal-note">${fmtPct1(d.called_to_lead.progress_pct)} of goal</div>
+        </div>
+      </div>
+    `;
+  }
+
   return `
     ${notesBlock}
     <div class="grid two">
       <div class="card">
-        <h3>Kajabi Revenue <span class="badge">${fmtMoney(s.kajabi.total_gross)}${isTrend ? ' · 4-wk total' : ' total'}</span></h3>
+        <h3>Kajabi Revenue <span class="badge">${fmtMoney(s.kajabi.total_gross)} total</span></h3>
         <div class="row"><span class="rlabel">IGNITE Her University</span><span class="rval">${fmtMoney(s.kajabi.ignite_her_university)}</span></div>
         <div class="row"><span class="rlabel">Quantum Leap Incubator</span><span class="rval">${fmtMoney(s.kajabi.quantum_leap_incubator)}</span></div>
         <div class="row"><span class="rlabel">Power Hour</span><span class="rval">${fmtMoney(s.kajabi.power_hour)}</span></div>
       </div>
       <div class="card">
-        <h3>Substack Revenue <span class="badge">${fmtMoney(s.substack.total)}${isTrend ? ' · 4-wk total' : ' total'}</span></h3>
+        <h3>Substack Revenue <span class="badge">${fmtMoney(s.substack.total)} total</span></h3>
         <div class="row"><span class="rlabel">Red Rebelle Room</span><span class="rval">${fmtMoney(s.substack.red_rebelle_room)}</span></div>
         <div class="row"><span class="rlabel">Soapbox</span><span class="rval">${fmtMoney(s.substack.soapbox)}</span></div>
       </div>
     </div>
     <div class="grid two">
       <div class="card">
-        <h3>${isTrend ? 'Merch Shop Sales <span class="badge">4-Wk Total · Shopify</span>' : 'Weekly Merch Shop Sales <span class="badge">Shopify</span>'}</h3>
+        <h3>Weekly Merch Shop Sales <span class="badge">Shopify</span></h3>
         <div class="row"><span class="rlabel">Gross</span><span class="rval">${fmtMoney(m.gross)} ${changeSpan(m.gross_change)}</span></div>
         <div class="row"><span class="rlabel">Net</span><span class="rval">${fmtMoney(m.net)} ${changeSpan(m.net_change)}</span></div>
         <div class="row"><span class="rlabel">Total Sales</span><span class="rval">${fmtMoney(m.total_sales)} ${changeSpan(m.total_sales_change)}</span></div>
@@ -554,7 +1409,7 @@ function renderRevenue(period) {
       <div class="card">
         <h3>Called to Lead Tickets <span class="badge">Event</span></h3>
         <div class="row"><span class="rlabel">Total sold</span><span class="rval">${fmtInt(d.called_to_lead.total)} ${changeSpan(d.called_to_lead.total_change)}</span></div>
-        <div class="row"><span class="rlabel">New${isTrend ? ' (4-wk total)' : ' this week'}</span><span class="rval">${fmtInt(d.called_to_lead.new)}</span></div>
+        <div class="row"><span class="rlabel">New this week</span><span class="rval">${fmtInt(d.called_to_lead.new)}</span></div>
         <div class="row"><span class="rlabel">Goal</span><span class="rval">${d.called_to_lead.goal}</span></div>
         <div class="bar-track"><div class="bar-fill" style="width:${Math.min(100, d.called_to_lead.progress_pct)}%"></div></div>
         <div class="goal-note">${fmtPct1(d.called_to_lead.progress_pct)} of goal</div>
@@ -599,7 +1454,57 @@ function legendText(period) {
   return 'All changes are vs last week: ↑ Increase · ↓ Decrease · — No change';
 }
 
+// Aligns a row of chart cards so their plot areas (the axis + bars, always
+// marked by the shared .wk-plot wrapper) start at exactly the same vertical
+// position, no matter how many lines of header content each card needs
+// (title only vs. title+subtitle vs. title+legend vs. title+KPI rows). Every
+// round so far fixed this per-row with a hand-picked pixel min-height, which
+// broke again the moment a card's content changed (a legend wrapping to a
+// second line, a new supporting row, etc.). This measures the actual
+// rendered height instead, so it stays correct going forward. Cards that
+// don't exist for a given `ids` entry (e.g. a different tab/view) are
+// skipped silently.
+function equalizeChartPlots(ids) {
+  const entries = ids.map(id => {
+    const card = document.getElementById('card-' + id);
+    const plot = card ? card.querySelector('.wk-plot') : null;
+    return (card && plot) ? { card, plot } : null;
+  }).filter(Boolean);
+  if (entries.length < 2) return;
+  // Reset any margin-top this function set on a previous call, so a card
+  // that no longer needs padding (e.g. after a resize) isn't stuck with it.
+  // This intentionally does NOT zero out .wk-plot's own base CSS margin —
+  // getComputedStyle below reads whatever that base is and adds to it.
+  entries.forEach(({ plot }) => { plot.style.marginTop = ''; });
+  const tops = entries.map(({ card, plot }) => plot.getBoundingClientRect().top - card.getBoundingClientRect().top);
+  const maxTop = Math.max(...tops);
+  entries.forEach(({ plot }, i) => {
+    const extra = maxTop - tops[i];
+    if (extra > 0.5) {
+      const base = parseFloat(getComputedStyle(plot).marginTop) || 0;
+      plot.style.marginTop = (base + extra) + 'px';
+    }
+  });
+}
+
+// Which rows of chart cards need their plot areas aligned, per tab. Only
+// meaningful in the Last 4 Weeks trend view — the individual-week views
+// don't use this chart component at all.
+function alignChartRows(tabId, period) {
+  if (!period || !period.is_trend) return;
+  if (tabId === 'membership') {
+    equalizeChartPlots(['programs', 'university', 'redrebelle']);
+  } else if (tabId === 'engagement') {
+    equalizeChartPlots(['dailyfreq', 'radio', 'actiontracker']);
+    equalizeChartPlots(['certs', 'webinaruv', 'tgimopen']);
+  } else if (tabId === 'revenue') {
+    equalizeChartPlots(['kajabirev', 'substackrev']);
+    equalizeChartPlots(['merchsales', 'ctlnew']);
+  }
+}
+
 function setTab(id) {
+  wkResetTooltip();
   const period = getPeriod(ACTIVE_PERIOD_ID);
   ACTIVE_TAB_ID = id;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === id));
@@ -607,6 +1512,7 @@ function setTab(id) {
   document.getElementById('app').innerHTML = tab.render(period);
   document.getElementById('sectionTitle').textContent = tab.label;
   document.getElementById('legendNote').style.display = (id === 'scheduling') ? 'none' : '';
+  alignChartRows(id, period);
 }
 
 function renderTabBar(period) {
@@ -656,6 +1562,14 @@ function init() {
   const defaultPeriod = DATA.periods.find(p => p.is_latest) || DATA.periods[0];
   select.value = defaultPeriod.id;
   renderPeriod(defaultPeriod.id);
+
+  // Re-run alignment on resize (legend wrapping/header heights depend on
+  // available card width), lightly debounced.
+  let resizeTimer = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => alignChartRows(ACTIVE_TAB_ID, getPeriod(ACTIVE_PERIOD_ID)), 120);
+  });
 }
 
 fetch('data.json?t=' + Date.now())
