@@ -171,9 +171,16 @@
   .pulse-item .prow .plabel{color:var(--ink-secondary);font-weight:600;min-width:58px;}
   .pulse-item .prow .pval{font-weight:700;}
 
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px;align-items:start;}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px;}
   .grid.two{grid-template-columns:repeat(2,1fr);}
   .grid.three{grid-template-columns:repeat(3,1fr);}
+  /* Only the one trend-view row that mixes a taller chart-card with plain KPI
+     cards (Substack Soapbox + Upsells & Upgrades + Renewals) needs its cards
+     left at their own natural height instead of stretched to match — every
+     other .grid row (including every individual-week view, which is all
+     plain KPI cards) should stay at the default stretch so a row's boxes
+     share one flush bottom edge instead of ending at different heights. */
+  .grid.mixed-row{align-items:start;}
   @media (max-width:860px){.grid,.grid.two,.grid.three{grid-template-columns:1fr;}}
 
   .card{
@@ -1030,7 +1037,7 @@ function renderMembership(period) {
       <div class="grid three">${programsChart}${universityChart}${redRebelleChart}</div>
 
       <div class="section-title">Soapbox · Upsells &amp; Upgrades · Renewals</div>
-      <div class="grid three">
+      <div class="grid three mixed-row">
         <div class="card chart-card">
           <div class="chart-head">
             <div class="chart-head-left">
