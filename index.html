@@ -458,7 +458,12 @@ function renderEngagement(period) {
     ? 'Total across the 4-week period'
     : (d.action_tracker.change === null ? 'No prior week to compare' : 'vs previous week');
   const certsLabel = isTrend ? 'Completed (4-wk total)' : 'Completed';
+  let notesBlock = '';
+  if (period.data_notes && period.data_notes.engagement) {
+    notesBlock = `<div class="data-notes"><strong>Data Notes</strong>${period.data_notes.engagement}</div>`;
+  }
   return `
+    ${notesBlock}
     <div class="grid">
       <div class="df-col">
         <div class="card">
@@ -589,7 +594,7 @@ function activeTabs(period) {
 }
 
 function legendText(period) {
-  if (period.is_trend) return 'Trend view — changes shown are net movement across the 4-week window (Aug 3–30): ↑ Increase · ↓ Decrease · — No change';
+  if (period.is_trend) return `Trend view — changes shown are net movement across the 4-week window (${period.range_label}): ↑ Increase · ↓ Decrease · — No change`;
   if (period.data.total_clients.change === null) return 'Earliest week on record — no prior week to compare against yet.';
   return 'All changes are vs last week: ↑ Increase · ↓ Decrease · — No change';
 }
