@@ -263,6 +263,8 @@
     padding:16px 20px;margin-bottom:20px;font-size:14.5px;color:#7a5b1f;line-height:1.55;
   }
   .data-notes strong{display:block;margin-bottom:6px;font-size:13.5px;text-transform:uppercase;letter-spacing:.04em;}
+  .data-notes ul{margin:0;padding-left:18px;}
+  .data-notes li{padding:2px 0;}
   .bar-track{height:9px;background:var(--line);border-radius:5px;margin-top:10px;overflow:hidden;}
   .bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--maroon));}
   .goal-note{font-size:13.5px;color:var(--ink-secondary);margin-top:6px;}
@@ -975,6 +977,10 @@ function renderMembership(period) {
   const d = period.data;
   const isTrend = period.is_trend;
   const revokedLabel = isTrend ? 'Members access revoked (4-wk total)' : 'Members access revoked this week';
+  let notesBlock = '';
+  if (period.data_notes && period.data_notes.membership) {
+    notesBlock = `<div class="data-notes"><strong>Data Notes</strong>${period.data_notes.membership}</div>`;
+  }
 
   if (isTrend) {
     const ws = d.weekly_series;
@@ -1034,6 +1040,7 @@ function renderMembership(period) {
     });
 
     return `
+      ${notesBlock}
       <div class="grid three">${programsChart}${universityChart}${redRebelleChart}</div>
 
       <div class="section-title">Soapbox · Upsells &amp; Upgrades · Renewals</div>
@@ -1064,6 +1071,7 @@ function renderMembership(period) {
   }
 
   return `
+    ${notesBlock}
     <div class="grid">
       <div class="card">
         <h3>IGNITE Other Programs</h3>
@@ -1072,8 +1080,8 @@ function renderMembership(period) {
       </div>
       <div class="card">
         <h3>IGNITE Her University</h3>
+        <div class="footnote footnote-top">${revokedLabel}: ${fmtInt(d.university.coach_school_access_revoked)}</div>
         <div class="stat"><span class="num">${fmtInt(d.university.value)}</span>${changeSpan(d.university.change)}</div>
-        <div class="footnote">${revokedLabel}: ${fmtInt(d.university.coach_school_access_revoked)}</div>
       </div>
       <div class="card">
         <h3>Red Rebelle Room <span class="badge">${fmtInt(d.red_rebelle.value)} total</span></h3>
