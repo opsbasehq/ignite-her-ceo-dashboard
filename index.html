@@ -1310,12 +1310,19 @@ function renderRevenue(period) {
   const s = d.sales_revenue;
   const m = d.merch;
   const isTrend = period.is_trend;
-  let notesBlock = '';
+  let noteFragments = [];
   if (period.is_latest && m.total_sales_change !== null && m.total_sales_change !== undefined) {
     const dir = m.total_sales_change > 0 ? 'increased' : (m.total_sales_change < 0 ? 'decreased' : 'held steady');
     const priorOrders = (m.orders !== null && m.orders_change !== null) ? (m.orders - m.orders_change) : null;
     const notesText = `Merch shop sales ${dir} vs last week: Total Sales ${fmtMoney(m.total_sales)} (${fmtPct1(m.total_sales_pct_change)}), Gross ${fmtMoney(m.gross)} (${fmtPct1(m.gross_pct_change)}), and Orders ${fmtInt(m.orders)} vs ${fmtInt(priorOrders)} last week.`;
-    notesBlock = `<div class="data-notes"><strong>Data Notes</strong>${notesText}</div>`;
+    noteFragments.push(`<p style="margin:0 0 8px;">${notesText}</p>`);
+  }
+  if (period.data_notes && period.data_notes.revenue) {
+    noteFragments.push(period.data_notes.revenue);
+  }
+  let notesBlock = '';
+  if (noteFragments.length) {
+    notesBlock = `<div class="data-notes"><strong>Data Notes</strong>${noteFragments.join('')}</div>`;
   }
   if (isTrend) {
     const ws = d.weekly_series;
@@ -1408,6 +1415,16 @@ function renderRevenue(period) {
         <h3>Substack Revenue <span class="badge">${fmtMoney(s.substack.total)} total</span></h3>
         <div class="row"><span class="rlabel">Red Rebelle Room</span><span class="rval">${fmtMoney(s.substack.red_rebelle_room)}</span></div>
         <div class="row"><span class="rlabel">Soapbox</span><span class="rval">${fmtMoney(s.substack.soapbox)}</span></div>
+      </div>
+    </div>
+    <div class="grid two">
+      <div class="card">
+        <h3>Kajabi MTD Revenue</h3>
+        <div class="chart-value" style="text-align:left;">${fmtMoney(s.kajabi.mtd)}<span class="val-caption">${s.kajabi.mtd_label || '—'}</span></div>
+      </div>
+      <div class="card">
+        <h3>Substack MTD Revenue</h3>
+        <div class="chart-value" style="text-align:left;">${fmtMoney(s.substack.mtd)}<span class="val-caption">${s.substack.mtd_label || '—'}</span></div>
       </div>
     </div>
     <div class="grid two">
