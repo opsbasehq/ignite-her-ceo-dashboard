@@ -1311,14 +1311,19 @@ function renderRevenue(period) {
   const m = d.merch;
   const isTrend = period.is_trend;
   let noteFragments = [];
+  let merchLi = null;
   if (period.is_latest && m.total_sales_change !== null && m.total_sales_change !== undefined) {
     const dir = m.total_sales_change > 0 ? 'increased' : (m.total_sales_change < 0 ? 'decreased' : 'held steady');
     const priorOrders = (m.orders !== null && m.orders_change !== null) ? (m.orders - m.orders_change) : null;
-    const notesText = `Merch shop sales ${dir} vs last week: Total Sales ${fmtMoney(m.total_sales)} (${fmtPct1(m.total_sales_pct_change)}), Gross ${fmtMoney(m.gross)} (${fmtPct1(m.gross_pct_change)}), and Orders ${fmtInt(m.orders)} vs ${fmtInt(priorOrders)} last week.`;
-    noteFragments.push(`<p style="margin:0 0 8px;">${notesText}</p>`);
+    const notesText = `${dir} vs last week — Total Sales ${fmtMoney(m.total_sales)} (${fmtPct1(m.total_sales_pct_change)}), Gross ${fmtMoney(m.gross)} (${fmtPct1(m.gross_pct_change)}), and Orders ${fmtInt(m.orders)} vs ${fmtInt(priorOrders)} last week.`;
+    merchLi = `<li><b>Merch Shop Sales</b>: ${notesText}</li>`;
   }
   if (period.data_notes && period.data_notes.revenue) {
-    noteFragments.push(period.data_notes.revenue);
+    let revenueNotes = period.data_notes.revenue;
+    revenueNotes = merchLi ? revenueNotes.replace('<ul>', `<ul>${merchLi}`) : revenueNotes;
+    noteFragments.push(revenueNotes);
+  } else if (merchLi) {
+    noteFragments.push(`<ul>${merchLi}</ul>`);
   }
   let notesBlock = '';
   if (noteFragments.length) {
@@ -1402,6 +1407,25 @@ function renderRevenue(period) {
     `;
   }
 
+  // The event-capacity fields (Total Attending / Status) are hand-curated per week (see
+  // CALLED_TO_LEAD_STATUS in build_data.py) and only populated once Gen provides them for a specific
+  // week. Weeks without them keep the original Total sold / New this week / Goal / progress-bar format;
+  // only a week with a curated status swaps to Tickets Sold / New This Week / Total Attending / Status.
+  const ctlBody = d.called_to_lead.status
+    ? `
+        <div class="row"><span class="rlabel">Tickets Sold</span><span class="rval">${fmtInt(d.called_to_lead.total)} ${changeSpan(d.called_to_lead.total_change)}</span></div>
+        <div class="row"><span class="rlabel">New This Week</span><span class="rval">${fmtInt(d.called_to_lead.new)}</span></div>
+        <div class="row"><span class="rlabel">Total Attending</span><span class="rval">${fmtInt(d.called_to_lead.attending)}</span></div>
+        <div class="row"><span class="rlabel">Status</span><span class="rval">${d.called_to_lead.status}</span></div>
+      `
+    : `
+        <div class="row"><span class="rlabel">Total sold</span><span class="rval">${fmtInt(d.called_to_lead.total)} ${changeSpan(d.called_to_lead.total_change)}</span></div>
+        <div class="row"><span class="rlabel">New this week</span><span class="rval">${fmtInt(d.called_to_lead.new)}</span></div>
+        <div class="row"><span class="rlabel">Goal</span><span class="rval">${d.called_to_lead.goal}</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:${Math.min(100, d.called_to_lead.progress_pct)}%"></div></div>
+        <div class="goal-note">${fmtPct1(d.called_to_lead.progress_pct)} of goal</div>
+      `;
+
   return `
     ${notesBlock}
     <div class="grid two">
@@ -1419,12 +1443,22 @@ function renderRevenue(period) {
     </div>
     <div class="grid two">
       <div class="card">
-        <h3>Kajabi MTD Revenue</h3>
-        <div class="chart-value" style="text-align:left;">${fmtMoney(s.kajabi.mtd)}<span class="val-caption">${s.kajabi.mtd_label || '—'}</span></div>
+        <div class="chart-head">
+          <div class="chart-head-left">
+            <h3>Kajabi MTD Revenue</h3>
+            <div class="chart-sub">${s.kajabi.mtd_label || '—'}</div>
+          </div>
+          <div class="chart-value">${fmtMoney(s.kajabi.mtd)}</div>
+        </div>
       </div>
       <div class="card">
-        <h3>Substack MTD Revenue</h3>
-        <div class="chart-value" style="text-align:left;">${fmtMoney(s.substack.mtd)}<span class="val-caption">${s.substack.mtd_label || '—'}</span></div>
+        <div class="chart-head">
+          <div class="chart-head-left">
+            <h3>Substack MTD Revenue</h3>
+            <div class="chart-sub">${s.substack.mtd_label || '—'}</div>
+          </div>
+          <div class="chart-value">${fmtMoney(s.substack.mtd)}</div>
+        </div>
       </div>
     </div>
     <div class="grid two">
@@ -1440,11 +1474,7 @@ function renderRevenue(period) {
       </div>
       <div class="card">
         <h3>Called to Lead Tickets <span class="badge">Event</span></h3>
-        <div class="row"><span class="rlabel">Total sold</span><span class="rval">${fmtInt(d.called_to_lead.total)} ${changeSpan(d.called_to_lead.total_change)}</span></div>
-        <div class="row"><span class="rlabel">New this week</span><span class="rval">${fmtInt(d.called_to_lead.new)}</span></div>
-        <div class="row"><span class="rlabel">Goal</span><span class="rval">${d.called_to_lead.goal}</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:${Math.min(100, d.called_to_lead.progress_pct)}%"></div></div>
-        <div class="goal-note">${fmtPct1(d.called_to_lead.progress_pct)} of goal</div>
+        ${ctlBody}
       </div>
     </div>
   `;

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-23T05:23:22.151348Z",
+  "generated_at": "2026-09-23T05:58:08.369729Z",
   "report_date_label": "Sep 21, 2026",
   "periods": [
     {
@@ -77,7 +77,9 @@
           "new": 2.0,
           "goal": 50,
           "progress_pct": 86.0,
-          "total_change": 2.0
+          "total_change": 2.0,
+          "attending": 54,
+          "status": "AT CAPACITY"
         },
         "daily_frequency": {
           "kajabi_avg": 315.2,
@@ -251,7 +253,9 @@
           "new": 4.0,
           "goal": 50,
           "progress_pct": 82.0,
-          "total_change": 4.0
+          "total_change": 4.0,
+          "attending": null,
+          "status": null
         },
         "daily_frequency": {
           "kajabi_avg": 320.75,
@@ -408,7 +412,9 @@
           "new": 2.0,
           "goal": 50,
           "progress_pct": 74.0,
-          "total_change": 2.0
+          "total_change": 2.0,
+          "attending": null,
+          "status": null
         },
         "daily_frequency": {
           "kajabi_avg": 288.8,
@@ -565,7 +571,9 @@
           "new": 2.0,
           "goal": 50,
           "progress_pct": 70.0,
-          "total_change": 2.0
+          "total_change": 2.0,
+          "attending": null,
+          "status": null
         },
         "daily_frequency": {
           "kajabi_avg": 331.2,
@@ -718,7 +726,9 @@
           "new": 10.0,
           "goal": 50,
           "progress_pct": 86.0,
-          "total_change": 8.0
+          "total_change": 8.0,
+          "attending": 54,
+          "status": "AT CAPACITY"
         },
         "daily_frequency": {
           "kajabi_avg": 314.0,
