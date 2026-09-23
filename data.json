@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-23T05:58:08.369729Z",
+  "generated_at": "2026-09-23T12:13:48.331752Z",
   "report_date_label": "Sep 21, 2026",
   "periods": [
     {
@@ -68,8 +68,8 @@
         },
         "renewals": {
           "renewed": 31.0,
-          "not_renewing": 20.0,
-          "no_response": 11.0,
+          "not_renewing": 19.0,
+          "no_response": 10.0,
           "up_for_renewal_raw": null
         },
         "called_to_lead": {
@@ -173,7 +173,7 @@
         ]
       },
       "data_notes": {
-        "membership": "<ul><li><b>IGNITE Her Renewals</b><ul><li>31 of 76 renewed this week: 21 PIF and 10 on 12-month payment plans.</li><li>43 of 76 have renewed overall \u2014 57% renewal rate.</li><li>Current statuses provided: 20 did not renew and 11 did not respond.</li><li>Why members did not renew: there is no single dominant reason. Financial constraints and no response are the most common themes. Several members who cannot renew now remain positive about IGNITE Her University and expressed interest in returning.</li><li>Program-related feedback: a smaller group mentioned live connection, AI/Juno, pricing expectations, and clarity around certification/resource access. Kept separate from financial non-renewals because these may represent retention opportunities tied to communication or delivery.</li><li>Reactivation opportunity: Erin will track members who expressed interest in returning and create follow-up lists for November\u2013January and 3\u20136 months.</li></ul></li><li><b>Substack Soapbox</b>: 42 new yearly members joined Soapbox.</li></ul>",
+        "membership": "<ul><li><b>IGNITE Her Renewals</b><ul><li>31 of 72 renewed this week: 21 PIF and 10 on 12-month payment plans.</li><li>43 of 72 have renewed overall \u2014 60% renewal rate.</li><li>Current statuses provided: 19 did not renew and 10 did not respond.</li><li>Why members did not renew: there is no single dominant reason. Financial constraints and no response are the most common themes. Several members who cannot renew now remain positive about IGNITE Her University and expressed interest in returning.</li><li>Program-related feedback: a smaller group mentioned live connection, AI/Juno, pricing expectations, and clarity around certification/resource access. Kept separate from financial non-renewals because these may represent retention opportunities tied to communication or delivery.</li><li>Reactivation opportunity: Erin will track members who expressed interest in returning and create follow-up lists for November\u2013January and 3\u20136 months.</li></ul></li><li><b>Substack Soapbox</b>: 42 new yearly members joined Soapbox.</li></ul>",
         "engagement": "<ul><li><b>IGNITE Her Frequency Guide Certifications</b>: 0 for the past 3 weeks while the process is being refined. Moving forward, Erin will own the process; Julie will review the currently pending certifications.</li><li><b>Action Tracker Submissions</b>: increased compared with the previous 2 weeks.</li><li><b>TGIM Emails</b>: open rates decreased this week.</li><li><b>Webinar Unique Viewers</b>: increased this week.</li></ul>",
         "revenue": "<ul><li><b>Kajabi Revenue</b>: significant increase this week due to renewal season.</li><li><b>Substack Revenue</b>: increased this week.</li><li><b>Called to Lead</b>: 43 tickets purchased; the event is now at capacity. Total event attendance is 54.</li></ul>"
       }
@@ -717,8 +717,8 @@
         },
         "renewals": {
           "renewed": 44.0,
-          "not_renewing": 20.0,
-          "no_response": 12.0,
+          "not_renewing": 19.0,
+          "no_response": 11.0,
           "up_for_renewal_raw": null
         },
         "called_to_lead": {
