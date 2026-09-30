@@ -1206,7 +1206,7 @@ function renderEngagement(period) {
       })),
       segments: [
         { key: 'webinar_tue', rateKey: 'webinar_tue_rate', label: 'Business Support', color: 'var(--maroon)' },
-        { key: 'webinar_wed', rateKey: 'webinar_wed_rate', label: 'Substack School', color: 'var(--gold)' },
+        { key: 'webinar_wed', rateKey: 'webinar_wed_rate', label: 'Substack', color: 'var(--gold)' },
         { key: 'webinar_thu', rateKey: 'webinar_thu_rate', label: 'Frequencies', color: 'var(--ink-secondary)' },
       ],
     });
@@ -1294,7 +1294,7 @@ function renderEngagement(period) {
         <h3>Webinar Unique Viewers</h3>
         <div class="webinar-head"><span>Webinar</span><span>UV / Rate</span></div>
         <div class="webinar-row"><span class="wname">Tue — Business Support</span><span class="wval">${fmtInt(d.webinars.tue)} · ${fmtPct1(d.webinars.tue_rate)}</span></div>
-        <div class="webinar-row"><span class="wname">Wed — Substack School</span><span class="wval">${fmtInt(d.webinars.wed)} · ${fmtPct1(d.webinars.wed_rate)}</span></div>
+        <div class="webinar-row"><span class="wname">Wed — Substack</span><span class="wval">${fmtInt(d.webinars.wed)} · ${fmtPct1(d.webinars.wed_rate)}</span></div>
         <div class="webinar-row"><span class="wname">Thu — IGNITE Her Frequencies</span><span class="wval">${fmtInt(d.webinars.thu)} · ${fmtPct1(d.webinars.thu_rate)}</span></div>
       </div>
       <div class="card">
