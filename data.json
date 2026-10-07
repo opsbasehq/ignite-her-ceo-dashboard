@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-07T11:11:30.954973Z",
+  "generated_at": "2026-10-07T12:19:52.003117Z",
   "report_date_label": "Oct 5, 2026",
   "periods": [
     {
@@ -86,8 +86,8 @@
         "daily_frequency": {
           "kajabi_avg": 297.8,
           "kajabi_change": -7.8,
-          "substack_avg": 1121.8,
-          "substack_change": 1016.3
+          "substack_avg": 121.8,
+          "substack_change": 16.3
         },
         "action_tracker": {
           "value": 9.0,
@@ -783,8 +783,8 @@
         "daily_frequency": {
           "kajabi_avg": 309.8,
           "kajabi_change": -22.9,
-          "substack_avg": 357.8,
-          "substack_change": 1020.8
+          "substack_avg": 107.8,
+          "substack_change": 20.8
         },
         "action_tracker": {
           "value": 64.0,
@@ -979,8 +979,8 @@
             "soapbox_yearly": 429.0,
             "soapbox_total": 471.0,
             "kajabi_avg": 297.8,
-            "substack_avg": 1121.8,
-            "daily_frequency_total": 1419.6,
+            "substack_avg": 121.8,
+            "daily_frequency_total": 419.6,
             "radio": null,
             "action_tracker": 9.0,
             "webinar_tue": null,
