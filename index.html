@@ -163,7 +163,8 @@
   }
   .pulse-box h3{margin:0 0 12px;font-size:13.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--maroon);font-weight:700;}
   .pulse-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
-  @media (max-width:860px){.pulse-grid{grid-template-columns:repeat(2,1fr);}}
+  .pulse-grid.three{grid-template-columns:repeat(3,1fr);}
+  @media (max-width:860px){.pulse-grid,.pulse-grid.three{grid-template-columns:repeat(2,1fr);}}
   .pulse-item .pk{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-muted);font-weight:700;}
   .pulse-item .pv{font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--ink);margin-top:4px;}
   .pulse-item .pc{font-size:13px;margin-top:2px;}
@@ -174,6 +175,7 @@
   .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px;}
   .grid.two{grid-template-columns:repeat(2,1fr);}
   .grid.three{grid-template-columns:repeat(3,1fr);}
+  .grid.one{grid-template-columns:1fr;}
   /* Only the one trend-view row that mixes a taller chart-card with plain KPI
      cards (Substack Soapbox + Upsells & Upgrades + Renewals) needs its cards
      left at their own natural height instead of stretched to match — every
@@ -947,7 +949,7 @@ function heroHTML(period) {
     </div>` : ''}
     <div class="pulse-box">
       <h3>Weekly Pulse${period.is_trend ? ' — 4-Week Trend' : ''}</h3>
-      <div class="pulse-grid">
+      <div class="pulse-grid${d.called_to_lead.retired ? ' three' : ''}">
         <div class="pulse-item">
           <div class="pk">Net Client Change</div>
           <div class="pv">${d.total_clients.change > 0 ? '+' : ''}${fmtInt(d.total_clients.change)}</div>
@@ -963,11 +965,12 @@ function heroHTML(period) {
           <div class="pv">${fmtInt(d.action_tracker.value)}</div>
           <div class="pc">${changeSpan(d.action_tracker.change)}</div>
         </div>
+        ${d.called_to_lead.retired ? '' : `
         <div class="pulse-item">
           <div class="pk">Called to Lead — New${period.is_trend ? '' : ' This Week'}</div>
           <div class="pv">${fmtInt(d.called_to_lead.new)}</div>
           <div class="pc">${fmtInt(d.called_to_lead.total)} / ${d.called_to_lead.goal} total (${fmtPct1(d.called_to_lead.progress_pct)} of goal)</div>
-        </div>
+        </div>`}
       </div>
     </div>
   `;
@@ -1368,17 +1371,12 @@ function renderRevenue(period) {
       weeks: ws.map(w => ({ label: w.label, total: w.rev_merch_total_sales, rev_merch_total_sales: w.rev_merch_total_sales })),
       segments: [{ key: 'rev_merch_total_sales', label: 'Total Sales', color: 'var(--maroon)' }],
     });
-    const ctlChartInner = buildWeekChart({
-      id: 'ctlnew',
-      bare: true,
-      weeks: ws.map(w => ({ label: w.label, total: w.rev_called_to_lead_new, rev_called_to_lead_new: w.rev_called_to_lead_new })),
-      segments: [{ key: 'rev_called_to_lead_new', label: 'New Tickets', color: 'var(--maroon)' }],
-    });
-
-    return `
-      ${notesBlock}
-      <div class="grid two">${kajabiChart}${substackChart}</div>
-      <div class="grid two">
+    // The Called to Lead event is over as of the week set in build_data.py's
+    // CALLED_TO_LEAD_RETIRED_FROM — the trend chart card is dropped entirely
+    // once the most recent week in this window is past that cutoff, and the
+    // Merch Shop Sales card next to it widens to fill the row on its own.
+    const ctlRetired = d.called_to_lead.retired;
+    const merchCard = `
         <div class="card chart-card" id="card-merchsales">
           <div class="chart-head">
             <div class="chart-head-left">
@@ -1388,7 +1386,20 @@ function renderRevenue(period) {
             <div class="chart-value">${fmtMoney(m.net)}<span class="val-caption">4-week total Net Sales</span></div>
           </div>
           ${merchChartInner}
-        </div>
+        </div>`;
+    let merchCtlRow;
+    if (ctlRetired) {
+      merchCtlRow = `<div class="grid one">${merchCard}</div>`;
+    } else {
+      const ctlChartInner = buildWeekChart({
+        id: 'ctlnew',
+        bare: true,
+        weeks: ws.map(w => ({ label: w.label, total: w.rev_called_to_lead_new, rev_called_to_lead_new: w.rev_called_to_lead_new })),
+        segments: [{ key: 'rev_called_to_lead_new', label: 'New Tickets', color: 'var(--maroon)' }],
+      });
+      merchCtlRow = `
+      <div class="grid two">
+        ${merchCard}
         <div class="card chart-card" id="card-ctlnew">
           <div class="chart-head">
             <div class="chart-head-left">
@@ -1403,7 +1414,13 @@ function renderRevenue(period) {
           <div class="bar-track"><div class="bar-fill" style="width:${Math.min(100, d.called_to_lead.progress_pct)}%"></div></div>
           <div class="goal-note">${fmtPct1(d.called_to_lead.progress_pct)} of goal</div>
         </div>
-      </div>
+      </div>`;
+    }
+
+    return `
+      ${notesBlock}
+      <div class="grid two">${kajabiChart}${substackChart}</div>
+      ${merchCtlRow}
     `;
   }
 
@@ -1411,6 +1428,10 @@ function renderRevenue(period) {
   // CALLED_TO_LEAD_STATUS in build_data.py) and only populated once Gen provides them for a specific
   // week. Weeks without them keep the original Total sold / New this week / Goal / progress-bar format;
   // only a week with a curated status swaps to Tickets Sold / New This Week / Total Attending / Status.
+  // The event is now over — d.called_to_lead.retired is true for this week and every week going
+  // forward (see CALLED_TO_LEAD_RETIRED_FROM in build_data.py), and the whole card is dropped for
+  // those weeks rather than rendered in either format.
+  const ctlRetired = d.called_to_lead.retired;
   const ctlBody = d.called_to_lead.status
     ? `
         <div class="row"><span class="rlabel">Tickets Sold</span><span class="rval">${fmtInt(d.called_to_lead.total)} ${changeSpan(d.called_to_lead.total_change)}</span></div>
@@ -1425,6 +1446,36 @@ function renderRevenue(period) {
         <div class="bar-track"><div class="bar-fill" style="width:${Math.min(100, d.called_to_lead.progress_pct)}%"></div></div>
         <div class="goal-note">${fmtPct1(d.called_to_lead.progress_pct)} of goal</div>
       `;
+
+  const merchCard = `
+      <div class="card">
+        <h3>Weekly Merch Shop Sales <span class="badge">Shopify</span></h3>
+        <div class="row"><span class="rlabel">Gross</span><span class="rval">${fmtMoney(m.gross)} ${changeSpan(m.gross_change)}</span></div>
+        <div class="row"><span class="rlabel">Net</span><span class="rval">${fmtMoney(m.net)} ${changeSpan(m.net_change)}</span></div>
+        <div class="row"><span class="rlabel">Total Sales</span><span class="rval">${fmtMoney(m.total_sales)} ${changeSpan(m.total_sales_change)}</span></div>
+        <div class="row"><span class="rlabel">Orders</span><span class="rval">${m.orders_raw ?? '—'} ${changeSpan(m.orders_change)}</span></div>
+        <div class="row"><span class="rlabel">AOV</span><span class="rval">${fmtMoney(m.aov)} ${changeSpan(m.aov_change)}</span></div>
+        <div class="row"><span class="rlabel">Returning</span><span class="rval">${fmtPct(m.returning)} ${changeSpan(m.returning_change_pts)}</span></div>
+        <div class="footnote">Top seller: ${m.top_sellers || '—'}</div>
+      </div>`;
+  const merchCtlRow = ctlRetired
+    ? `<div class="grid one">${merchCard}</div>`
+    : `
+    <div class="grid two">
+      ${merchCard}
+      <div class="card">
+        <h3>Called to Lead Tickets <span class="badge">Event</span></h3>
+        ${ctlBody}
+      </div>
+    </div>`;
+
+  // Month-to-date Revenue rows: normally one row (this month's running
+  // total). A week that spans a calendar-month boundary carries a second
+  // row for the just-closed month's final total — see parse_mtd_sections()
+  // in build_data.py.
+  const mtdRows = sections => sections.map(sec =>
+    `<div class="row"><span class="rlabel">${sec.label}</span><span class="rval">${fmtMoney(sec.amount)}</span></div>`
+  ).join('');
 
   return `
     ${notesBlock}
@@ -1443,40 +1494,15 @@ function renderRevenue(period) {
     </div>
     <div class="grid two">
       <div class="card">
-        <div class="chart-head">
-          <div class="chart-head-left">
-            <h3>Kajabi MTD Revenue</h3>
-            <div class="chart-sub">${s.kajabi.mtd_label || '—'}</div>
-          </div>
-          <div class="chart-value">${fmtMoney(s.kajabi.mtd)}</div>
-        </div>
+        <h3>Kajabi MTD Revenue</h3>
+        ${mtdRows(s.kajabi.mtd_sections)}
       </div>
       <div class="card">
-        <div class="chart-head">
-          <div class="chart-head-left">
-            <h3>Substack MTD Revenue</h3>
-            <div class="chart-sub">${s.substack.mtd_label || '—'}</div>
-          </div>
-          <div class="chart-value">${fmtMoney(s.substack.mtd)}</div>
-        </div>
+        <h3>Substack MTD Revenue</h3>
+        ${mtdRows(s.substack.mtd_sections)}
       </div>
     </div>
-    <div class="grid two">
-      <div class="card">
-        <h3>Weekly Merch Shop Sales <span class="badge">Shopify</span></h3>
-        <div class="row"><span class="rlabel">Gross</span><span class="rval">${fmtMoney(m.gross)} ${changeSpan(m.gross_change)}</span></div>
-        <div class="row"><span class="rlabel">Net</span><span class="rval">${fmtMoney(m.net)} ${changeSpan(m.net_change)}</span></div>
-        <div class="row"><span class="rlabel">Total Sales</span><span class="rval">${fmtMoney(m.total_sales)} ${changeSpan(m.total_sales_change)}</span></div>
-        <div class="row"><span class="rlabel">Orders</span><span class="rval">${m.orders_raw ?? '—'} ${changeSpan(m.orders_change)}</span></div>
-        <div class="row"><span class="rlabel">AOV</span><span class="rval">${fmtMoney(m.aov)} ${changeSpan(m.aov_change)}</span></div>
-        <div class="row"><span class="rlabel">Returning</span><span class="rval">${fmtPct(m.returning)} ${changeSpan(m.returning_change_pts)}</span></div>
-        <div class="footnote">Top seller: ${m.top_sellers || '—'}</div>
-      </div>
-      <div class="card">
-        <h3>Called to Lead Tickets <span class="badge">Event</span></h3>
-        ${ctlBody}
-      </div>
-    </div>
+    ${merchCtlRow}
   `;
 }
 
