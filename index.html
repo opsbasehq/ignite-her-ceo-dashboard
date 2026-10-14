@@ -276,7 +276,7 @@
   footer.meta{margin-top:36px;font-size:13px;color:var(--ink-muted);text-align:center;}
   .empty{color:var(--ink-muted);font-size:14.5px;font-style:italic;}
 
-  /* Last 4 Weeks charts (bar / stacked bar / grouped bar / line) */
+  /* Last N Weeks charts (bar / stacked bar / grouped bar / line) */
   .chart-card{padding-bottom:12px;}
   .chart-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;}
   .chart-head-left{min-width:0;flex:1;}
@@ -406,7 +406,7 @@ const fmtMoney = n => (n === null || n === undefined) ? '—' : '$' + n.toLocale
 const fmtPct = n => (n === null || n === undefined) ? '—' : (Math.round(n*1000)/10) + '%';
 const fmtPct1 = n => (n === null || n === undefined) ? '—' : (Math.round(n*10)/10) + '%';
 
-/* ---- Last 4 Weeks bar charts (Membership & Programs) ---- */
+/* ---- Last N Weeks bar charts (Membership & Programs) ---- */
 const CHART_REGISTRY = {};
 let wkPinnedKey = null;
 
@@ -878,7 +878,8 @@ function arrowVal(delta) {
 }
 function heroChange(delta, cssClass, suffix) {
   // "↑ 1 vs last wk" / "↓ 1 vs last wk" / "— 0 vs last wk" style used in the PDF hero.
-  // suffix is period-aware: "vs last wk" for a single week, "vs 4 wks ago" for the trend view.
+  // suffix is period-aware: "vs last wk" for a single week, "vs N wks ago" for the trend view
+  // (N = the trend window's actual week count, read from weekly_series.length — see heroHTML).
   suffix = suffix || 'vs last wk';
   if (delta === null || delta === undefined) return `<span class="${cssClass} flat">No prior data</span>`;
   const rounded = Math.round(delta*10)/10;
@@ -912,7 +913,7 @@ function getPeriod(id) {
 
 function heroHTML(period) {
   const d = period.data;
-  const suffix = period.is_trend ? 'vs 4 wks ago' : 'vs last wk';
+  const suffix = period.is_trend ? `vs ${d.weekly_series.length} wks ago` : 'vs last wk';
   const moved = period.what_moved;
   return `
     <div class="hero">
@@ -948,7 +949,7 @@ function heroHTML(period) {
       <ul>${moved.map(m=>`<li>${m}</li>`).join('')}</ul>
     </div>` : ''}
     <div class="pulse-box">
-      <h3>Weekly Pulse${period.is_trend ? ' — 4-Week Trend' : ''}</h3>
+      <h3>Weekly Pulse${period.is_trend ? ` — ${d.weekly_series.length}-Week Trend` : ''}</h3>
       <div class="pulse-grid${d.called_to_lead.retired ? ' three' : ''}">
         <div class="pulse-item">
           <div class="pk">Net Client Change</div>
@@ -979,7 +980,8 @@ function heroHTML(period) {
 function renderMembership(period) {
   const d = period.data;
   const isTrend = period.is_trend;
-  const revokedLabel = isTrend ? 'Members access revoked (4-wk total)' : 'Members access revoked this week';
+  const trendWeeks = isTrend ? d.weekly_series.length : null;
+  const revokedLabel = isTrend ? `Members access revoked (${trendWeeks}-wk total)` : 'Members access revoked this week';
   let notesBlock = '';
   if (period.data_notes && period.data_notes.membership) {
     notesBlock = `<div class="data-notes"><strong>Data Notes</strong>${period.data_notes.membership}</div>`;
@@ -1059,12 +1061,12 @@ function renderMembership(period) {
           ${soapboxChartInner}
         </div>
         <div class="card">
-          <h3>Upsells &amp; Upgrades <span class="badge">4-wk total</span></h3>
+          <h3>Upsells &amp; Upgrades <span class="badge">${trendWeeks}-wk total</span></h3>
           <div class="row"><span class="rlabel">IGNITE Her U</span><span class="rval">${fmtInt(d.upsells.ignite_her_u.value)} ${changeLabel(d.upsells.ignite_her_u.change)}</span></div>
           <div class="row"><span class="rlabel">1:1 Power Hours</span><span class="rval">${fmtInt(d.upsells.power_hour.value)}</span></div>
         </div>
         <div class="card">
-          <h3>Renewals <span class="badge">4-wk total</span></h3>
+          <h3>Renewals <span class="badge">${trendWeeks}-wk total</span></h3>
           <div class="row"><span class="rlabel">Renewed</span><span class="rval">${fmtInt(d.renewals.renewed)}</span></div>
           <div class="row"><span class="rlabel">Not Renewing</span><span class="rval">${fmtInt(d.renewals.not_renewing)}</span></div>
           <div class="row"><span class="rlabel">No Response</span><span class="rval">${fmtInt(d.renewals.no_response)}</span></div>
@@ -1146,10 +1148,11 @@ function tgimTable(d) {
 function renderEngagement(period) {
   const d = period.data;
   const isTrend = period.is_trend;
+  const trendWeeks = isTrend ? d.weekly_series.length : null;
   const atFootnote = isTrend
-    ? 'Total across the 4-week period'
+    ? `Total across the ${trendWeeks}-week period`
     : (d.action_tracker.change === null ? 'No prior week to compare' : 'vs previous week');
-  const certsLabel = isTrend ? 'Completed (4-wk total)' : 'Completed';
+  const certsLabel = isTrend ? `Completed (${trendWeeks}-wk total)` : 'Completed';
   let notesBlock = '';
   if (period.data_notes && period.data_notes.engagement) {
     notesBlock = `<div class="data-notes"><strong>Data Notes</strong>${period.data_notes.engagement}</div>`;
@@ -1159,7 +1162,7 @@ function renderEngagement(period) {
     const ws = d.weekly_series;
     // Kajabi and Substack are separate channels and must never be summed —
     // a 2-series line chart (not a stacked bar) so neither reads as "part of"
-    // a combined total. The two 4-week averages are shown as their own rows
+    // a combined total. The two period averages are shown as their own rows
     // above the chart instead of a single combined headline number.
     const dailyFreqLine = buildLineChart({
       id: 'dailyfreq',
@@ -1179,7 +1182,7 @@ function renderEngagement(period) {
       id: 'radio',
       title: 'IGNITE Her Radio Downloads',
       valueNum: d.radio.value,
-      valueCaption: '4-week avg',
+      valueCaption: `${trendWeeks}-week avg`,
       headMinHeight: ROW1_HEAD_H,
       weeks: ws.map(w => ({ label: w.label, radio: w.radio })),
       series: [{ key: 'radio', label: 'Radio', color: 'var(--maroon)' }],
@@ -1188,7 +1191,7 @@ function renderEngagement(period) {
       id: 'actiontracker',
       title: 'Action Tracker Submissions',
       valueNum: d.action_tracker.value,
-      valueCaption: '4-week total',
+      valueCaption: `${trendWeeks}-week total`,
       headMinHeight: ROW1_HEAD_H,
       weeks: ws.map(w => ({ label: w.label, total: w.action_tracker, action_tracker: w.action_tracker })),
       segments: [{ key: 'action_tracker', label: 'Submissions', color: 'var(--maroon)' }],
@@ -1219,7 +1222,7 @@ function renderEngagement(period) {
       id: 'certs',
       title: 'Ignite Her Frequency Guide Certifications',
       valueNum: d.coach_school_certifications,
-      valueCaption: '4-week total',
+      valueCaption: `${trendWeeks}-week total`,
       weeks: ws.map(w => ({ label: w.label, total: w.certifications, certifications: w.certifications })),
       segments: [{ key: 'certifications', label: 'Completed', color: 'var(--maroon)' }],
     });
@@ -1254,8 +1257,8 @@ function renderEngagement(period) {
           <div class="chart-head" style="min-height:${ROW1_HEAD_H}px">
             <div class="chart-head-left">
               <h3>Daily Frequency Downloads</h3>
-              <div class="row row-tight"><span class="rlabel">Kajabi — 4-week Avg Downloads</span><span class="rval">${fmt1(d.daily_frequency.kajabi_avg)}</span></div>
-              <div class="row row-tight"><span class="rlabel">Substack — 4-week Avg Downloads</span><span class="rval">${fmt1(d.daily_frequency.substack_avg)}</span></div>
+              <div class="row row-tight"><span class="rlabel">Kajabi — ${trendWeeks}-week Avg Downloads</span><span class="rval">${fmt1(d.daily_frequency.kajabi_avg)}</span></div>
+              <div class="row row-tight"><span class="rlabel">Substack — ${trendWeeks}-week Avg Downloads</span><span class="rval">${fmt1(d.daily_frequency.substack_avg)}</span></div>
             </div>
           </div>
           ${dailyFreqLine}
@@ -1313,6 +1316,7 @@ function renderRevenue(period) {
   const s = d.sales_revenue;
   const m = d.merch;
   const isTrend = period.is_trend;
+  const trendWeeks = isTrend ? d.weekly_series.length : null;
   let noteFragments = [];
   let merchLi = null;
   if (period.is_latest && m.total_sales_change !== null && m.total_sales_change !== undefined) {
@@ -1339,7 +1343,7 @@ function renderRevenue(period) {
       title: 'Kajabi Revenue',
       valueNum: s.kajabi.total_gross,
       valueFormat: 'money',
-      valueCaption: '4-week total',
+      valueCaption: `${trendWeeks}-week total`,
       weeks: ws.map(w => ({
         label: w.label, total: w.rev_kajabi_total,
         rev_kajabi_university: w.rev_kajabi_university,
@@ -1357,7 +1361,7 @@ function renderRevenue(period) {
       title: 'Substack Revenue',
       valueNum: s.substack.total,
       valueFormat: 'money',
-      valueCaption: '4-week total',
+      valueCaption: `${trendWeeks}-week total`,
       weeks: ws.map(w => ({ label: w.label, total: w.rev_substack_total, rev_substack_rr: w.rev_substack_rr, rev_substack_soapbox: w.rev_substack_soapbox })),
       segments: [
         { key: 'rev_substack_rr', label: 'Red Rebelle Room', color: 'var(--maroon)' },
@@ -1383,7 +1387,7 @@ function renderRevenue(period) {
               <h3>Merch Shop Sales</h3>
               <div class="chart-sub">Total Sales · Shopify</div>
             </div>
-            <div class="chart-value">${fmtMoney(m.net)}<span class="val-caption">4-week total Net Sales</span></div>
+            <div class="chart-value">${fmtMoney(m.net)}<span class="val-caption">${trendWeeks}-week total Net Sales</span></div>
           </div>
           ${merchChartInner}
         </div>`;
@@ -1406,7 +1410,7 @@ function renderRevenue(period) {
               <h3>Called to Lead Tickets</h3>
               <div class="chart-sub">New tickets · Event</div>
             </div>
-            <div class="chart-value">${fmtInt(d.called_to_lead.new)}<span class="val-caption">4-week total</span></div>
+            <div class="chart-value">${fmtInt(d.called_to_lead.new)}<span class="val-caption">${trendWeeks}-week total</span></div>
           </div>
           ${ctlChartInner}
           <div class="row" style="margin-top:12px;"><span class="rlabel">Total sold</span><span class="rval">${fmtInt(d.called_to_lead.total)} ${changeSpan(d.called_to_lead.total_change)}</span></div>
@@ -1524,7 +1528,7 @@ function renderScheduling(period) {
 
 // "latestOnly" tabs (Scheduling) only appear when the selected period is the
 // latest completed week — CURRENT Events & Scheduling is current-state only
-// and is not meaningful for older weeks or the Last 4 Weeks trend view.
+// and is not meaningful for older weeks or the Last N Weeks trend view.
 const ALL_TABS = [
   { id: 'membership', label: 'Membership & Programs', render: renderMembership },
   { id: 'engagement', label: 'Community & Engagement', render: renderEngagement },
@@ -1537,7 +1541,7 @@ function activeTabs(period) {
 }
 
 function legendText(period) {
-  if (period.is_trend) return `Trend view — changes shown are net movement across the 4-week window (${period.range_label}): ↑ Increase · ↓ Decrease · — No change`;
+  if (period.is_trend) return `Trend view — changes shown are net movement across the ${period.data.weekly_series.length}-week window (${period.range_label}): ↑ Increase · ↓ Decrease · — No change`;
   if (period.data.total_clients.change === null) return 'Earliest week on record — no prior week to compare against yet.';
   return 'All changes are vs last week: ↑ Increase · ↓ Decrease · — No change';
 }
@@ -1576,7 +1580,7 @@ function equalizeChartPlots(ids) {
 }
 
 // Which rows of chart cards need their plot areas aligned, per tab. Only
-// meaningful in the Last 4 Weeks trend view — the individual-week views
+// meaningful in the Last N Weeks trend view — the individual-week views
 // don't use this chart component at all.
 function alignChartRows(tabId, period) {
   if (!period || !period.is_trend) return;

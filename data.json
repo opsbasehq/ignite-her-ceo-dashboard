@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-14T10:58:57.421560Z",
+  "generated_at": "2026-10-14T11:38:30.139303Z",
   "report_date_label": "Oct 12, 2026",
   "periods": [
     {
@@ -12,7 +12,7 @@
         "range": "10/05/26\u201310/11/26",
         "what_moved_this_week": [
           "IGNITE Her University \u2191 2 - Increase by 2 - 1 renewal (Monica Sood (Nov renewal) and Tracie Cornell came back for 6 months at no charge - per Julie's Ok)",
-          "Red Rebelle Room \u2191 2 - Had 2 new members join - not sure why #s are same from last week",
+          "Red Rebelle Room \u2191 2 - 2 new members joined the Room!",
           "Ignite Programs \u2193 1 - Incubator - Sarah Yeoman not renewing - asked to be taken out"
         ],
         "total_clients": {
@@ -45,7 +45,7 @@
           },
           "room": {
             "value": 64.0,
-            "change": 0.0
+            "change": 2.0
           }
         },
         "soapbox": {
@@ -84,10 +84,10 @@
           "retired": true
         },
         "daily_frequency": {
-          "kajabi_avg": 281.4,
-          "kajabi_change": -16.4,
-          "substack_avg": 0.0,
-          "substack_change": -121.8
+          "kajabi_avg": 304.0,
+          "kajabi_change": 6.2,
+          "substack_avg": 144.4,
+          "substack_change": 22.6
         },
         "action_tracker": {
           "value": 25.0,
@@ -167,7 +167,7 @@
       },
       "what_moved": [
         "IGNITE Her University \u2191 2 - Increase by 2 - 1 renewal (Monica Sood (Nov renewal) and Tracie Cornell came back for 6 months at no charge - per Julie's Ok)",
-        "Red Rebelle Room \u2191 2 - Had 2 new members join - not sure why #s are same from last week",
+        "Red Rebelle Room \u2191 2 - 2 new members joined the Room!",
         "Ignite Programs \u2193 1 - Incubator - Sarah Yeoman not renewing - asked to be taken out"
       ],
       "events_scheduling": {
@@ -197,7 +197,6 @@
         "range": "9/28/26\u201310/4/26",
         "what_moved_this_week": [
           "IGNITE Her University \u2193 1  - 1 Univeristy Member did not renew",
-          "Red Rebelle Room \u2191 2 - 2 new Red Rebelle Room members",
           "IGNITE PROGRAMS \u2193 2 - 2 LAB members did not renew - no response"
         ],
         "total_clients": {
@@ -229,8 +228,8 @@
             "change": 0.0
           },
           "room": {
-            "value": 64.0,
-            "change": 2.0
+            "value": 62.0,
+            "change": 0.0
           }
         },
         "soapbox": {
@@ -358,7 +357,6 @@
       },
       "what_moved": [
         "IGNITE Her University \u2193 1  - 1 Univeristy Member did not renew",
-        "Red Rebelle Room \u2191 2 - 2 new Red Rebelle Room members",
         "IGNITE PROGRAMS \u2193 2 - 2 LAB members did not renew - no response"
       ],
       "events_scheduling": null,
@@ -786,10 +784,10 @@
           "retired": true
         },
         "daily_frequency": {
-          "kajabi_avg": 300.0,
-          "kajabi_change": -33.8,
-          "substack_avg": 82.6,
-          "substack_change": -103.0
+          "kajabi_avg": 305.7,
+          "kajabi_change": -11.2,
+          "substack_avg": 118.7,
+          "substack_change": 41.4
         },
         "action_tracker": {
           "value": 72.0,
@@ -937,8 +935,8 @@
             "programs": 219.0,
             "university": 359.0,
             "red_rebelle_drop": 158.0,
-            "red_rebelle_room": 64.0,
-            "red_rebelle_total": 222.0,
+            "red_rebelle_room": 62.0,
+            "red_rebelle_total": 220.0,
             "soapbox_monthly": 42.0,
             "soapbox_yearly": 429.0,
             "soapbox_total": 471.0,
@@ -983,9 +981,9 @@
             "soapbox_monthly": 39.0,
             "soapbox_yearly": 455.0,
             "soapbox_total": 494.0,
-            "kajabi_avg": 281.4,
-            "substack_avg": 0.0,
-            "daily_frequency_total": 281.4,
+            "kajabi_avg": 304.0,
+            "substack_avg": 144.4,
+            "daily_frequency_total": 448.4,
             "radio": 54.5,
             "action_tracker": 25.0,
             "webinar_tue": 117.0,
@@ -1023,7 +1021,6 @@
   "flags": [
     "Week column '10/12/26 - 10/17/26' found in the workbook but only 1 of 66 fields have data \u2014 treated as not yet a completed week and excluded from the dashboard until it's fully filled in.",
     "[9/14/26\u20139/20/26] 'What Moved This Week' row 41 contains an unusually long entry (836 characters, vs. ~224 max for a normal bullet) that looks like overflow narrative rather than a short update \u2014 excluded from 'What Moved This Week'; please confirm in the workbook whether it belongs in a Data Note instead.",
-    "[10/05/26\u201310/11/26] 'Avg Downloads per episode (Substack)' jumped from 121.8 to 0 (0.0x week-over-week) \u2014 this looks like it could be a data entry error rather than a real change; please confirm.",
     "[10/05/26\u201310/11/26] Merch Shop Sales (gross, total, and orders) are all exactly 0 this week \u2014 every prior week has had some nonzero activity, so this looks more like the week's figures not being entered yet than an actual zero-sales week; please confirm.",
     "[8/17/26\u20138/23/26] Renewed/Not Renewing/No Response counts are identical to the prior week \u2014 please confirm these were actually updated and aren't a stale carry-over.",
     "[8/24/26\u20138/30/26] Renewed/Not Renewing/No Response counts are identical to the prior week \u2014 please confirm these were actually updated and aren't a stale carry-over.",
