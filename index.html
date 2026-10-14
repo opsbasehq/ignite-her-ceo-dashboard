@@ -1296,9 +1296,9 @@ function renderEngagement(period) {
       <div class="card">
         <h3>Webinar Unique Viewers</h3>
         <div class="webinar-head"><span>Webinar</span><span>UV / Rate</span></div>
-        <div class="webinar-row"><span class="wname">Tue — Business Support</span><span class="wval">${fmtInt(d.webinars.tue)} · ${fmtPct1(d.webinars.tue_rate)}</span></div>
-        <div class="webinar-row"><span class="wname">Wed — Substack</span><span class="wval">${fmtInt(d.webinars.wed)} · ${fmtPct1(d.webinars.wed_rate)}</span></div>
-        <div class="webinar-row"><span class="wname">Thu — IGNITE Her Frequencies</span><span class="wval">${fmtInt(d.webinars.thu)} · ${fmtPct1(d.webinars.thu_rate)}</span></div>
+        ${(d.webinars.no_call || []).includes('tue') ? '' : `<div class="webinar-row"><span class="wname">Tue — Business Support</span><span class="wval">${fmtInt(d.webinars.tue)} · ${fmtPct1(d.webinars.tue_rate)}</span></div>`}
+        ${(d.webinars.no_call || []).includes('wed') ? '' : `<div class="webinar-row"><span class="wname">Wed — Substack</span><span class="wval">${fmtInt(d.webinars.wed)} · ${fmtPct1(d.webinars.wed_rate)}</span></div>`}
+        ${(d.webinars.no_call || []).includes('thu') ? '' : `<div class="webinar-row"><span class="wname">Thu — IGNITE Her Frequencies</span><span class="wval">${fmtInt(d.webinars.thu)} · ${fmtPct1(d.webinars.thu_rate)}</span></div>`}
       </div>
       <div class="card">
         <h3>TGIM Email Engagement</h3>
