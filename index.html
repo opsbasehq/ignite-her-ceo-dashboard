@@ -1293,6 +1293,8 @@ function renderEngagement(period) {
       <div class="card">
         <h3>Ignite Her Frequency Guide Certifications</h3>
         <div class="row"><span class="rlabel">${certsLabel}</span><span class="rval">${fmtInt(d.coach_school_certifications)}</span></div>
+        ${d.total_certified_guides === null || d.total_certified_guides === undefined ? '' : `<div class="row"><span class="rlabel">Total Certified Guides</span><span class="rval">${fmtInt(d.total_certified_guides)}</span></div>`}
+        ${d.active_certified_guides === null || d.active_certified_guides === undefined ? '' : `<div class="row"><span class="rlabel">Active Certified Guides</span><span class="rval">${fmtInt(d.active_certified_guides)}</span></div>`}
       </div>
     </div>
     <div class="grid two">
@@ -1317,24 +1319,16 @@ function renderRevenue(period) {
   const m = d.merch;
   const isTrend = period.is_trend;
   const trendWeeks = isTrend ? d.weekly_series.length : null;
-  let noteFragments = [];
-  let merchLi = null;
-  if (period.is_latest && m.total_sales_change !== null && m.total_sales_change !== undefined) {
-    const dir = m.total_sales_change > 0 ? 'increased' : (m.total_sales_change < 0 ? 'decreased' : 'held steady');
-    const priorOrders = (m.orders !== null && m.orders_change !== null) ? (m.orders - m.orders_change) : null;
-    const notesText = `${dir} vs last week — Total Sales ${fmtMoney(m.total_sales)} (${fmtPct1(m.total_sales_pct_change)}), Gross ${fmtMoney(m.gross)} (${fmtPct1(m.gross_pct_change)}), and Orders ${fmtInt(m.orders)} vs ${fmtInt(priorOrders)} last week.`;
-    merchLi = `<li><b>Merch Shop Sales</b>: ${notesText}</li>`;
-  }
-  if (period.data_notes && period.data_notes.revenue) {
-    let revenueNotes = period.data_notes.revenue;
-    revenueNotes = merchLi ? revenueNotes.replace('<ul>', `<ul>${merchLi}`) : revenueNotes;
-    noteFragments.push(revenueNotes);
-  } else if (merchLi) {
-    noteFragments.push(`<ul>${merchLi}</ul>`);
-  }
+  // Merch Shop Sales used to get an auto-generated weekly note here ("increased/decreased
+  // vs last week — ..."), the only auto-written Data Note on the whole dashboard. Removed
+  // round 41 at Gen's request — it looked broken whenever the prior week's figure was $0
+  // (percent change from zero is undefined, rendered as "(—)"), and it was inconsistent
+  // with every other tab, where Data Notes are hand-curated (WEEK_DATA_NOTES in
+  // build_data.py) and only appear when there's something worth calling out. Revenue now
+  // behaves the same way — no note unless one is explicitly added for a given week.
   let notesBlock = '';
-  if (noteFragments.length) {
-    notesBlock = `<div class="data-notes"><strong>Data Notes</strong>${noteFragments.join('')}</div>`;
+  if (period.data_notes && period.data_notes.revenue) {
+    notesBlock = `<div class="data-notes"><strong>Data Notes</strong>${period.data_notes.revenue}</div>`;
   }
   if (isTrend) {
     const ws = d.weekly_series;
