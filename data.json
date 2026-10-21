@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-10-21T00:11:36.900256Z",
-  "report_date_label": "Oct 12, 2026",
+  "generated_at": "2026-10-21T00:27:24.797861Z",
   "periods": [
     {
       "id": "week_101226_101826",
       "label": "Oct 12\u201318, 2026",
       "range": "10/12/26\u201310/18/26",
+      "report_date_label": "Oct 19, 2026",
       "is_latest": true,
       "is_trend": false,
       "data": {
@@ -190,6 +190,7 @@
       "id": "week_100526_101126",
       "label": "Oct 5\u201311, 2026",
       "range": "10/05/26\u201310/11/26",
+      "report_date_label": "Oct 12, 2026",
       "is_latest": false,
       "is_trend": false,
       "data": {
@@ -363,6 +364,7 @@
       "id": "week_92826_10426",
       "label": "Sep 28 \u2013 Oct 4, 2026",
       "range": "9/28/26\u201310/4/26",
+      "report_date_label": "Oct 5, 2026",
       "is_latest": false,
       "is_trend": false,
       "data": {
@@ -540,6 +542,7 @@
       "id": "week_92126_92726",
       "label": "Sep 21\u201327, 2026",
       "range": "9/21/26\u20139/27/26",
+      "report_date_label": "Sep 28, 2026",
       "is_latest": false,
       "is_trend": false,
       "data": {
@@ -715,6 +718,7 @@
       "label": "Last 4 Weeks",
       "range": "9/21/26\u201310/18/26",
       "range_label": "Sep 21 \u2013 Oct 18, 2026",
+      "report_date_label": "Oct 19, 2026",
       "is_latest": false,
       "is_trend": true,
       "data": {
