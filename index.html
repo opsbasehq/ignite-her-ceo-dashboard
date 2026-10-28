@@ -175,7 +175,13 @@
   .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px;}
   .grid.two{grid-template-columns:repeat(2,1fr);}
   .grid.three{grid-template-columns:repeat(3,1fr);}
+  .grid.four{grid-template-columns:repeat(4,1fr);}
   .grid.one{grid-template-columns:1fr;}
+  /* Round 45 follow-up: Merch Shop (left, ~60%) paired with The NOW Goal x
+     The Download (right, ~40%) instead of NOW Goal sitting in its own full
+     -width row underneath — Gen asked for Merch to get the bigger share and
+     for the two to sit side by side. */
+  .grid.merch-now{grid-template-columns:3fr 2fr;}
   /* Only the one trend-view row that mixes a taller chart-card with plain KPI
      cards (Substack Soapbox + Upsells & Upgrades + Renewals) needs its cards
      left at their own natural height instead of stretched to match — every
@@ -183,7 +189,7 @@
      plain KPI cards) should stay at the default stretch so a row's boxes
      share one flush bottom edge instead of ending at different heights. */
   .grid.mixed-row{align-items:start;}
-  @media (max-width:860px){.grid,.grid.two,.grid.three{grid-template-columns:1fr;}}
+  @media (max-width:860px){.grid,.grid.two,.grid.three,.grid.four,.grid.merch-now{grid-template-columns:1fr;}}
 
   .card{
     background:var(--card);
@@ -247,6 +253,18 @@
   .merch-kpi .mk-change{font-size:12.5px;margin-top:5px;}
   .merch-divider{border-top:1px solid var(--line);margin:16px 0 14px;}
   .merch-kpi-grid.secondary .mk-value{font-size:17px;color:var(--maroon-dark);}
+  /* Round 45 follow-up: reused for The NOW Goal x The Download's own 2-tile
+     layout (Total Sales / Total Sold) — same label-above-value KPI-tile
+     pattern as Merch, just 2 columns instead of 3, so the two numbers don't
+     end up stretched apart in a wide label-left/value-right row. */
+  .merch-kpi-grid.cols-2{grid-template-columns:repeat(2,1fr);}
+  /* NOW Goal's card stretches to match Merch's taller height in the
+     .grid.merch-now row — center its one KPI row in the leftover space
+     below the title instead of leaving it pinned to the top with a block
+     of empty card below it. */
+  .now-goal-card{display:flex;flex-direction:column;}
+  .now-goal-card .now-goal-body{flex:1;display:flex;align-items:center;}
+  .now-goal-card .merch-kpi-grid{width:100%;}
   @media (max-width:480px){.merch-kpi-grid{grid-template-columns:1fr 1fr;row-gap:14px;}}
   .list-simple{margin:0;padding:0;list-style:none;}
   .list-simple li{font-size:15px;padding:8px 0;border-top:1px solid var(--line);color:var(--ink-secondary);line-height:1.5;}
@@ -1198,6 +1216,21 @@ function renderEngagement(period) {
   if (period.data_notes && period.data_notes.engagement) {
     notesBlock = `<div class="data-notes"><strong>Data Notes</strong>${period.data_notes.engagement}</div>`;
   }
+  // Round 45: "IGNITE Her Daily" — a new block in the workbook, first filled
+  // in for Oct 19-25, 2026. Same None-safe, hide-until-present treatment as
+  // round 42's Total/Active Certified Guides: not yet in the trend view
+  // (only one week of data so far), and the row-1 grid widens from 3 to 4
+  // columns only on the weeks where this card actually renders.
+  const hasIgniteHerDaily = !isTrend && d.ignite_her_daily
+    && d.ignite_her_daily.guides_issued_codes !== null && d.ignite_her_daily.guides_issued_codes !== undefined;
+  const igniteHerDailyCard = hasIgniteHerDaily ? `
+      <div class="card">
+        <h3>Daily Frequency - IGNITE Her Daily</h3>
+        <div class="row"><span class="rlabel">Guides Issued Codes</span><span class="rval">${fmtInt(d.ignite_her_daily.guides_issued_codes)}</span></div>
+        <div class="row"><span class="rlabel">New Client Sign-ups</span><span class="rval">${fmtInt(d.ignite_her_daily.new_client_signups)}</span></div>
+        <div class="row"><span class="rlabel">Total Client Sign-ups</span><span class="rval">${fmtInt(d.ignite_her_daily.total_client_signups)}</span></div>
+      </div>` : '';
+  const row1GridClass = hasIgniteHerDaily ? 'grid four' : 'grid';
 
   if (isTrend) {
     const ws = d.weekly_series;
@@ -1317,7 +1350,7 @@ function renderEngagement(period) {
 
   return `
     ${notesBlock}
-    <div class="grid">
+    <div class="${row1GridClass}">
       <div class="df-col">
         <div class="card">
           <h3>Daily Frequency Downloads</h3>
@@ -1337,6 +1370,7 @@ function renderEngagement(period) {
         ${d.total_certified_guides === null || d.total_certified_guides === undefined ? '' : `<div class="row"><span class="rlabel">Total Certified Guides</span><span class="rval">${fmtInt(d.total_certified_guides)}</span></div>`}
         ${d.active_certified_guides === null || d.active_certified_guides === undefined ? '' : `<div class="row"><span class="rlabel">Active Certified Guides</span><span class="rval">${fmtInt(d.active_certified_guides)}</span></div>`}
       </div>
+      ${igniteHerDailyCard}
     </div>
     <div class="grid two">
       <div class="card">
@@ -1548,9 +1582,54 @@ function renderRevenue(period) {
         </div>
         ${merchFooterLines ? `<div class="footnote">${merchFooterLines}</div>` : ''}
       </div>`;
-  const merchCtlRow = ctlRetired
-    ? `<div class="grid one">${merchCard}</div>`
-    : `
+  // Round 45: "The Now Goal® x The Download" — a new block in the workbook,
+  // first filled in for Oct 19-25, 2026, right after the Merch Shop
+  // section. This is the name of one event/program (see
+  // igniteherbrand.com/thedownload) — Gen confirmed the exact correct form
+  // is "The Now Goal® x The Download" (registered-trademark mark after
+  // "Goal," lowercase "x"), rendered as a single unified title (not split
+  // into a title + badge like Merch's "Shopify" source label). Card h3s are
+  // visually uppercased by .card h3's text-transform, same as every other
+  // card title, so the ® still reads correctly at that size. Placement
+  // (paired with Merch rather than off on its own) is still inferred from
+  // where it sits in the sheet.
+  // KPI-tile layout (reusing Merch's own .merch-kpi-grid/.merch-kpi
+  // classes at 2 columns) rather than a full-width label-left/value-right
+  // row — at the narrower ~40% share of the row it now gets, a wide row
+  // left an awkward gap between the label and the figure.
+  const hasNowGoal = d.now_goal && d.now_goal.total_sales !== null && d.now_goal.total_sales !== undefined;
+  const nowGoalCard = hasNowGoal ? `
+      <div class="card now-goal-card">
+        <h3>The Now Goal&reg; x The Download</h3>
+        <div class="now-goal-body">
+          <div class="merch-kpi-grid cols-2">
+            <div class="merch-kpi">
+              <div class="mk-label">Total Sales</div>
+              <div class="mk-value">${fmtMoney(d.now_goal.total_sales)}</div>
+            </div>
+            <div class="merch-kpi">
+              <div class="mk-label">Total Sold</div>
+              <div class="mk-value">${fmtInt(d.now_goal.total_sold)}</div>
+            </div>
+          </div>
+        </div>
+      </div>` : '';
+
+  // Merch gets ~60% of the row and NOW Goal ~40% (.grid.merch-now) whenever
+  // both are present — which, in practice, is every week so far, since
+  // Called to Lead retired (see CALLED_TO_LEAD_RETIRED_FROM) before NOW
+  // Goal's data started. If a future week somehow has both an active
+  // Called to Lead AND NOW Goal data, Called to Lead keeps its existing
+  // Merch-pairing and NOW Goal falls back to its own full-width row below,
+  // rather than trying to cram three cards into one row.
+  let merchCtlRow;
+  let nowGoalRow = '';
+  if (ctlRetired) {
+    merchCtlRow = hasNowGoal
+      ? `<div class="grid merch-now">${merchCard}${nowGoalCard}</div>`
+      : `<div class="grid one">${merchCard}</div>`;
+  } else {
+    merchCtlRow = `
     <div class="grid two">
       ${merchCard}
       <div class="card">
@@ -1558,6 +1637,8 @@ function renderRevenue(period) {
         ${ctlBody}
       </div>
     </div>`;
+    if (hasNowGoal) nowGoalRow = `<div class="grid one">${nowGoalCard}</div>`;
+  }
 
   // Month-to-date Revenue rows: normally one row (this month's running
   // total). A week that spans a calendar-month boundary carries a second
@@ -1593,6 +1674,7 @@ function renderRevenue(period) {
       </div>
     </div>
     ${merchCtlRow}
+    ${nowGoalRow}
   `;
 }
 
