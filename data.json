@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-28T08:00:36.710518Z",
+  "generated_at": "2026-10-28T13:29:10.932508Z",
   "periods": [
     {
       "id": "week_101926_102526",
@@ -164,7 +164,8 @@
         "active_certified_guides": 131.0,
         "power_hour_count": 0.0,
         "ignite_her_daily": {
-          "guides_issued_codes": 11.0,
+          "guides_issued_codes": 10.0,
+          "total_guides_issued_codes": 10.0,
           "new_client_signups": 2.0,
           "total_client_signups": 2.0
         },
@@ -357,6 +358,7 @@
         "power_hour_count": 0.0,
         "ignite_her_daily": {
           "guides_issued_codes": null,
+          "total_guides_issued_codes": null,
           "new_client_signups": null,
           "total_client_signups": null
         },
@@ -540,6 +542,7 @@
         "power_hour_count": 0.0,
         "ignite_her_daily": {
           "guides_issued_codes": null,
+          "total_guides_issued_codes": null,
           "new_client_signups": null,
           "total_client_signups": null
         },
@@ -728,6 +731,7 @@
         "power_hour_count": 0.0,
         "ignite_her_daily": {
           "guides_issued_codes": null,
+          "total_guides_issued_codes": null,
           "new_client_signups": null,
           "total_client_signups": null
         },
@@ -1058,7 +1062,7 @@
     }
   ],
   "flags": [
-    "Week column '10/26/26 - 11/1/26' found in the workbook but only 4 of 73 fields have data \u2014 treated as not yet a completed week and excluded from the dashboard until it's fully filled in.",
+    "Week column '10/26/26 - 11/1/26' found in the workbook but only 8 of 74 fields have data \u2014 treated as not yet a completed week and excluded from the dashboard until it's fully filled in.",
     "[9/14/26\u20139/20/26] 'What Moved This Week' row 41 contains an unusually long entry (836 characters, vs. ~224 max for a normal bullet) that looks like overflow narrative rather than a short update \u2014 excluded from 'What Moved This Week'; please confirm in the workbook whether it belongs in a Data Note instead.",
     "[9/28/26\u201310/4/26] Total Clients (800) does not equal Programs+University+Red Rebelle (798) \u2014 reconciliation mismatch, please check the workbook.",
     "[10/05/26\u201310/11/26] Merch Shop Sales (gross, total, and orders) are all exactly 0 this week \u2014 every prior week has had some nonzero activity, so this looks more like the week's figures not being entered yet than an actual zero-sales week; please confirm.",
